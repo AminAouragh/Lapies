@@ -1,4 +1,8 @@
-Console.WriteLine("""
+public static class Map
+{
+    public static void DrawMap()
+    {
+        Console.WriteLine("""
                                    +--------------------+
                                    | Alchemist's Garden |
                                    +--------------------+
@@ -18,3 +22,5 @@ Console.WriteLine("""
                                    |        Home        |
                                    +--------------------+
 """);
+    }
+}
