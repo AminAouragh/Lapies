@@ -60,10 +60,8 @@ public static class Menu
                         break;
                     }
                     Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("Displaying map");
+                    Map.DrawMap();
                     Console.ReadKey(true);
-                    Console.ResetColor();
                     break;
                 case 3:
                     if (player is null)

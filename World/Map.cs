@@ -1,26 +1,28 @@
 public static class Map
 {
+    // Home = quest of thors to move to north (Ocean)
+    // Grassland = player (100, but deals 10 damage) tries to fight Askeladd (1000hp) but doesnt succeed (NO QUEST)
+    // Forest = quest and introduction of Leif (unc), quest = protect Leif with low HP (bandit), if player dies, try again else
+    // cutscene between player and Leif (anger grown, change..) -> Leif brings Player to Town
+
     public static void DrawMap()
     {
-        Console.WriteLine("""
+        Console.ForegroundColor = ConsoleColor.Blue;
+        string home = "Home";
+        Console.WriteLine($@"
                                    +--------------------+
-                                   | Alchemist's Garden |
-                                   +--------------------+
-                                             |
-                                             |
-                                   +--------------------+
-                                   |  Alchemist's Hut   |
+                                   |       Ocean        |
                                    +--------------------+
                                              |
                                              |
 +----------------+   +-----------+   +---------------+   +------------+   +--------+   +--------+
-| Farmer's Field |---| Farmhouse |---|  Town Square  |---| Guard Post |---| Bridge |---| Forest |
+|     Forest     |---|    Town   |---|      {home}     |---|   Iceland  |---| Canute |---| Vinland
 +----------------+   +-----------+   +---------------+   +------------+   +--------+   +--------+
                                              |
                                              |
                                    +--------------------+
-                                   |        Home        |
+                                   |      Grassland     |
                                    +--------------------+
-""");
+");
     }
 }
