@@ -42,6 +42,23 @@ public class World
 
     public static void Start(Player player)
     {
+        Location home = new("Home");
+        Location town = new("Town");
+        Location vinland = new("Vinland");
+        Location ocean = new("Ocean");
+        Location forest = new("Forest");
+        Location grassland = new("Grassland");
+
+        home.South = town;
+        home.North = ocean; // quest van thors to move to north, npc = thors
+
+        town.North = home;
+
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(home.Name);
+        Console.ResetColor();
+        Location currentLocation = home;
+        player.currentLocation = currentLocation;
 
         ConsoleKey key;
         do
@@ -49,6 +66,10 @@ public class World
             Console.Clear();
             Console.WriteLine($"Greetings, {player.Name}\n");
             Console.WriteLine("GOAL OF GAME: Reach Lapis\n");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(currentLocation.Name);
+            Console.WriteLine();
 
             string legenda = "Open Menu -> M";
             string forward = "Move North -> W";
@@ -73,24 +94,25 @@ public class World
             {
                 Menu.Start();
             }
-            else if (key == ConsoleKey.W)
+            else if (key == ConsoleKey.W && currentLocation.North == null)
             {
                 Console.WriteLine("Moving North");
                 Console.ReadKey(true);
 
             }
-            else if (key == ConsoleKey.S)
+            else if (key == ConsoleKey.S && currentLocation.South == null)
             {
+                player.currentLocation = town;
                 Console.WriteLine("Moving South");
                 Console.ReadKey(true);
 
             }
-            else if (key == ConsoleKey.D)
+            else if (key == ConsoleKey.D && currentLocation.East == null)
             {
                 Console.WriteLine("Moving East");
                 Console.ReadKey(true);
             }
-            else if (key == ConsoleKey.A)
+            else if (key == ConsoleKey.A && currentLocation.West == null)
             {
                 Console.WriteLine("Moving West");
                 Console.ReadKey(true);
