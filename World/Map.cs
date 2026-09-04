@@ -2,7 +2,9 @@ public static class Map
 {
     public static void DrawMap()
     {
-        Console.WriteLine("""
+        Console.ForegroundColor = ConsoleColor.Blue;
+        string home = "Home";
+        Console.WriteLine($@"
                                    +--------------------+
                                    | Alchemist's Garden |
                                    +--------------------+
@@ -14,13 +16,13 @@ public static class Map
                                              |
                                              |
 +----------------+   +-----------+   +---------------+   +------------+   +--------+   +--------+
-| Farmer's Field |---| Farmhouse |---|  Town Square  |---| Guard Post |---| Bridge |---| Forest |
+| Farmer's Field |---| Farmhouse |---|      {home}     |---| Guard Post |---| Bridge |---| Forest |
 +----------------+   +-----------+   +---------------+   +------------+   +--------+   +--------+
                                              |
                                              |
                                    +--------------------+
-                                   |        Home        |
+                                   |     Town Square    |
                                    +--------------------+
-""");
+");
     }
 }
