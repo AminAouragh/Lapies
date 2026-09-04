@@ -8,12 +8,13 @@ public static class Helpers
        do
         {
             Console.Clear();
+            ASCII.PrintAscii();
 
             for (int i=0; i < MenuOptions.Count; i++)
             {
                 if (i == selectedIndex)
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine($"> {MenuOptions[i]}");
                     Console.ResetColor();
                 }
