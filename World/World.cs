@@ -1,40 +1,119 @@
-// public static class World
-// {
+public class World
+{
+    Player Player;
+    public static readonly List<Weapon> Weapons = new List<Weapon>();
+    public static readonly List<Monster> Monsters = new List<Monster>();
+    public static readonly List<Quest> Quests = new List<Quest>();
+    public static readonly List<Location> Locations = new List<Location>();
+    public static readonly Random RandomGenerator = new Random();
 
-//     public static readonly List<Weapon> Weapons = new List<Weapon>();
-//     public static readonly List<Monster> Monsters = new List<Monster>();
-//     public static readonly List<Quest> Quests = new List<Quest>();
-//     public static readonly List<Location> Locations = new List<Location>();
-//     public static readonly Random RandomGenerator = new Random();
+    public const int WEAPON_ID_RUSTY_SWORD = 1;
+    public const int WEAPON_ID_CLUB = 2;
 
-//     public const int WEAPON_ID_RUSTY_SWORD = 1;
-//     public const int WEAPON_ID_CLUB = 2;
+    public const int MONSTER_ID_RAT = 1;
+    public const int MONSTER_ID_SNAKE = 2;
+    public const int MONSTER_ID_GIANT_SPIDER = 3;
 
-//     public const int MONSTER_ID_RAT = 1;
-//     public const int MONSTER_ID_SNAKE = 2;
-//     public const int MONSTER_ID_GIANT_SPIDER = 3;
+    public const int QUEST_ID_CLEAR_ALCHEMIST_GARDEN = 1;
+    public const int QUEST_ID_CLEAR_FARMERS_FIELD = 2;
+    public const int QUEST_ID_COLLECT_SPIDER_SILK = 3;
 
-//     public const int QUEST_ID_CLEAR_ALCHEMIST_GARDEN = 1;
-//     public const int QUEST_ID_CLEAR_FARMERS_FIELD = 2;
-//     public const int QUEST_ID_COLLECT_SPIDER_SILK = 3;
+    public const int LOCATION_ID_HOME = 1;
+    public const int LOCATION_ID_TOWN_SQUARE = 2;
+    public const int LOCATION_ID_GUARD_POST = 3;
+    public const int LOCATION_ID_ALCHEMIST_HUT = 4;
+    public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
+    public const int LOCATION_ID_FARMHOUSE = 6;
+    public const int LOCATION_ID_FARM_FIELD = 7;
+    public const int LOCATION_ID_BRIDGE = 8;
+    public const int LOCATION_ID_SPIDER_FIELD = 9;
 
-//     public const int LOCATION_ID_HOME = 1;
-//     public const int LOCATION_ID_TOWN_SQUARE = 2;
-//     public const int LOCATION_ID_GUARD_POST = 3;
-//     public const int LOCATION_ID_ALCHEMIST_HUT = 4;
-//     public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
-//     public const int LOCATION_ID_FARMHOUSE = 6;
-//     public const int LOCATION_ID_FARM_FIELD = 7;
-//     public const int LOCATION_ID_BRIDGE = 8;
-//     public const int LOCATION_ID_SPIDER_FIELD = 9;
 
-//     static World()
-//     {
-//         PopulateWeapons();
-//         PopulateMonsters();
-//         PopulateQuests();
-//         PopulateLocations();
-//     }
+
+    public World(Player player)
+    {
+        Player = player;
+        // PopulateWeapons();
+        // PopulateMonsters();
+        // PopulateQuests();
+        // PopulateLocations();
+
+    }
+
+    public static void Start(Player player)
+    {
+
+        ConsoleKey key;
+        do
+        {
+            Console.Clear();
+            Console.WriteLine($"Greetings, {player.Name}\n");
+            Console.WriteLine("GOAL OF GAME: Reach Lapis\n");
+
+            string legenda = "Open Menu -> M";
+            string forward = "Move North -> W";
+            string left = "Move West -> A";
+            string backward = "Move South -> S";
+            string right = "Move East -> D";
+            Console.SetCursorPosition(Console.WindowWidth - legenda.Length, 0);
+            Console.Write(legenda);
+            Console.SetCursorPosition(Console.WindowWidth - forward.Length, 1);
+            Console.Write(forward);
+            Console.SetCursorPosition(Console.WindowWidth - left.Length, 2);
+            Console.Write(left);
+            Console.SetCursorPosition(Console.WindowWidth - backward.Length, 3);
+            Console.Write(backward);
+            Console.SetCursorPosition(Console.WindowWidth - right.Length, 4);
+            Console.Write(right);
+
+
+            key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.M)
+            {
+                Menu.Start();
+            }
+            else if (key == ConsoleKey.W)
+            {
+                Console.WriteLine("Moving North");
+                Console.ReadKey(true);
+
+            }
+            else if (key == ConsoleKey.S)
+            {
+                Console.WriteLine("Moving South");
+                Console.ReadKey(true);
+
+            }
+            else if (key == ConsoleKey.D)
+            {
+                Console.WriteLine("Moving East");
+                Console.ReadKey(true);
+            }
+            else if (key == ConsoleKey.A)
+            {
+                Console.WriteLine("Moving West");
+                Console.ReadKey(true);
+
+            }
+        }
+        while (true);
+    }
+
+/* mijn idee, miss list met random monsters en dan random nummer door random laten generaten en
+gebruiken als index voor list
+
+*/
+    public static void SpawnMonster()
+    {
+        Random random = new();
+        int rand = random.Next(0, 2);
+        if (rand == 1)
+        {
+            Monster ngr = new Monster("jew", 150);
+        }
+    }
+}
 
 
 //     public static void PopulateWeapons()
