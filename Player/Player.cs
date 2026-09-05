@@ -40,6 +40,33 @@ public class Player
         return player;
     }
 
+    public void Move(string direction)
+    {
+        Location? nextLocation = null;
+
+        switch (direction.ToLower())
+        {
+            case "north":
+                nextLocation = currentLocation.North;
+                break;
+            case "south":
+                nextLocation = currentLocation.South;
+                break;
+            case "east":
+                nextLocation = currentLocation.East;
+                break;
+            case "west":
+                nextLocation = currentLocation.West;
+                break;
+        }
+
+        if (nextLocation != null)
+        {
+            currentLocation = nextLocation;
+            Console.WriteLine($"Je bent naar {currentLocation.Name} gelopen.");
+        }
+    }
+
     public bool IsDead()
     {
         return HP <= 0;
