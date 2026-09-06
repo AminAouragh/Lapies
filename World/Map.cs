@@ -7,7 +7,7 @@ public static class Map
 
     public static void DrawMap()
     {
-        Console.ForegroundColor = ConsoleColor.Blue;
+        //Console.ForegroundColor = ConsoleColor.Blue;
         string home = "Home";
         Console.WriteLine($@"
                                    +--------------------+
