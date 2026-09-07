@@ -25,7 +25,7 @@ public class World
     public static Location Forest = new("Forest");
     public static Location Town = new("Town");
     public static Location Iceland = new("Iceland");
-    public static Location Canute = new("Canute");
+    public static Location Canute = new("Canute's Kingdom");
     public static Location Vinland = new("Vinland");
 
     // public const int LOCATION_ID_HOME = 1;
@@ -56,7 +56,6 @@ public class World
         Forest.East = Town;
         Town.West = Forest;
 
-        Town.North = Home;
         Town.East = Home;
         Home.West = Town;
 
@@ -88,15 +87,17 @@ public class World
             Console.Clear();
             Console.WriteLine($"Greetings, {player.Name}\n");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("GOAL OF GAME: Reach Lapis\n");
+            Console.Write("GOAL OF GAME: Reach Lapis\n");
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(currentLocation.Name);
+            Console.Write(currentLocation.Name);
             Console.ResetColor();
             Console.WriteLine();
 
             PrintLegenda();
+            PrintCompass();
+            Console.SetCursorPosition(0, 11);
 
             key = Console.ReadKey(true).Key;
 
@@ -131,21 +132,7 @@ gebruiken als index voor list
         if (nextLocation != null)
         {
             Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
-            return nextLocation;
-        }
-        else if (nextLocation != null)
-        {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
-            return nextLocation;
-        }
-        else if (nextLocation != null)
-        {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
-            return nextLocation;
-        }
-        else if (nextLocation != null)
-        {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
+            Console.ReadKey(true);
             return nextLocation;
         }
         return currentLocation;
@@ -171,6 +158,29 @@ gebruiken als index voor list
         Console.Write(right);
         Console.SetCursorPosition(Console.WindowWidth - right.Length, 5);
         Console.Write("+ ---------- +");
+    }
+
+    public static void PrintCompass()
+    {
+        int width = 9;
+        int startY = Console.WindowHeight - 6;
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY);
+        Console.Write("    N");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 1);
+        Console.Write("    |");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 2);
+        Console.Write("W - + - E");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 3);
+        Console.Write("    |");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 4);
+        Console.Write("    S");
+        Console.WriteLine();
+
     }
 
     public static void SpawnMonster()
