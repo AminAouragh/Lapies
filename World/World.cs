@@ -91,7 +91,7 @@ public class World
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(currentLocation.Name);
+            Console.WriteLine($"You are in the {currentLocation.Name} area.");
             Console.ResetColor();
             Console.WriteLine();
 
