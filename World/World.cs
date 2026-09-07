@@ -75,9 +75,9 @@ public class World
 
         //test movement
         Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(home.Name);
+        Console.WriteLine(Home.Name);
         Console.ResetColor();
-        Location currentLocation = home;
+        Location currentLocation = Home;
         player.currentLocation = currentLocation;
 
         ConsoleKey key;
@@ -225,9 +225,9 @@ gebruiken als index voor list
 //     public static void PopulateLocations()
 //     {
 //         // Create each location
-//         Location home = new Location(LOCATION_ID_HOME, "Home", "Your house. You really need to clean up the place.", null, null);
+//         Location Home = new Location(LOCATION_ID_Home, "Home", "Your house. You really need to clean up the place.", null, null);
 
-//         Location townSquare = new Location(LOCATION_ID_TOWN_SQUARE, "Town square", "You see a fountain.", null, null);
+//         Location TownSquare = new Location(LOCATION_ID_Town_SQUARE, "Town square", "You see a fountain.", null, null);
 
 //         Location alchemistHut = new Location(LOCATION_ID_ALCHEMIST_HUT, "Alchemist's hut", "There are many strange plants on the shelves.", null, null);
 //         alchemistHut.QuestAvailableHere = QuestByID(QUEST_ID_CLEAR_ALCHEMIST_GARDEN);
@@ -250,25 +250,25 @@ gebruiken als index voor list
 //         spiderField.MonsterLivingHere = MonsterByID(MONSTER_ID_GIANT_SPIDER);
 
 //         // Link the locations together
-//         home.LocationToNorth = townSquare;
+//         Home.LocationToNorth = TownSquare;
 
-//         townSquare.LocationToNorth = alchemistHut;
-//         townSquare.LocationToSouth = home;
-//         townSquare.LocationToEast = guardPost;
-//         townSquare.LocationToWest = farmhouse;
+//         TownSquare.LocationToNorth = alchemistHut;
+//         TownSquare.LocationToSouth = Home;
+//         TownSquare.LocationToEast = guardPost;
+//         TownSquare.LocationToWest = farmhouse;
 
-//         farmhouse.LocationToEast = townSquare;
+//         farmhouse.LocationToEast = TownSquare;
 //         farmhouse.LocationToWest = farmersField;
 
 //         farmersField.LocationToEast = farmhouse;
 
-//         alchemistHut.LocationToSouth = townSquare;
+//         alchemistHut.LocationToSouth = TownSquare;
 //         alchemistHut.LocationToNorth = alchemistsGarden;
 
 //         alchemistsGarden.LocationToSouth = alchemistHut;
 
 //         guardPost.LocationToEast = bridge;
-//         guardPost.LocationToWest = townSquare;
+//         guardPost.LocationToWest = TownSquare;
 
 //         bridge.LocationToWest = guardPost;
 //         bridge.LocationToEast = spiderField;
@@ -276,8 +276,8 @@ gebruiken als index voor list
 //         spiderField.LocationToWest = bridge;
 
 //         // Add the locations to the static list
-//         Locations.Add(home);
-//         Locations.Add(townSquare);
+//         Locations.Add(Home);
+//         Locations.Add(TownSquare);
 //         Locations.Add(guardPost);
 //         Locations.Add(alchemistHut);
 //         Locations.Add(alchemistsGarden);
