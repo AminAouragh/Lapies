@@ -92,7 +92,7 @@ public class World
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(currentLocation.Name);
+            Console.WriteLine($"You are in the {currentLocation.Name} area.");
             Console.ResetColor();
             Console.WriteLine();
 
@@ -130,22 +130,6 @@ gebruiken als index voor list
 
         if (nextLocation != null)
         {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
-            return nextLocation;
-        }
-        else if (nextLocation != null)
-        {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
-            return nextLocation;
-        }
-        else if (nextLocation != null)
-        {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
-            return nextLocation;
-        }
-        else if (nextLocation != null)
-        {
-            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
             return nextLocation;
         }
         return currentLocation;
