@@ -1,6 +1,6 @@
 public class World
 {
-    Player Player;
+    public Player Player;
     public static readonly List<Weapon> Weapons = new List<Weapon>();
     public static readonly List<Monster> Monsters = new List<Monster>();
     public static readonly List<Quest> Quests = new List<Quest>();
@@ -18,15 +18,25 @@ public class World
     public const int QUEST_ID_CLEAR_FARMERS_FIELD = 2;
     public const int QUEST_ID_COLLECT_SPIDER_SILK = 3;
 
-    public const int LOCATION_ID_HOME = 1;
-    public const int LOCATION_ID_TOWN_SQUARE = 2;
-    public const int LOCATION_ID_GUARD_POST = 3;
-    public const int LOCATION_ID_ALCHEMIST_HUT = 4;
-    public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
-    public const int LOCATION_ID_FARMHOUSE = 6;
-    public const int LOCATION_ID_FARM_FIELD = 7;
-    public const int LOCATION_ID_BRIDGE = 8;
-    public const int LOCATION_ID_SPIDER_FIELD = 9;
+    //Locations
+    public static Location home = new("Home");
+    public static Location ocean = new("Ocean");
+    public static Location grassland = new("Grassland");
+    public static Location forest = new("Forest");
+    public static Location town = new("Town");
+    public static Location iceland = new("Iceland");
+    public static Location canute = new("Canute");
+    public static Location vinland = new("Vinland");
+
+    // public const int LOCATION_ID_HOME = 1;
+    // public const int LOCATION_ID_TOWN_SQUARE = 2;
+    // public const int LOCATION_ID_GUARD_POST = 3;
+    // public const int LOCATION_ID_ALCHEMIST_HUT = 4;
+    // public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
+    // public const int LOCATION_ID_FARMHOUSE = 6;
+    // public const int LOCATION_ID_FARM_FIELD = 7;
+    // public const int LOCATION_ID_BRIDGE = 8;
+    // public const int LOCATION_ID_SPIDER_FIELD = 9;
 
 
 
@@ -42,19 +52,28 @@ public class World
 
     public static void Start(Player player)
     {
-        Location home = new("Home");
-        Location town = new("Town");
-        Location vinland = new("Vinland");
-        Location ocean = new("Ocean");
-        Location forest = new("Forest");
-        Location grassland = new("Grassland");
-
-        home.South = town;
+        //movement van punt a -> b
         home.North = ocean; // quest van thors to move to north, npc = thors
-        //home.East = ice
+        home.South = grassland;
+        home.East = iceland;
+        home.West = town;
 
-        town.North = home;
+        town.East = home;
+        town.West = forest;
 
+        forest.East = town;
+        ocean.South = home;
+        grassland.North = home;
+
+        iceland.East = canute;
+        iceland.West = home;
+
+        canute.East = vinland;
+        canute.West = iceland;
+
+        vinland.West = canute;
+
+        //test movement
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(home.Name);
         Console.ResetColor();
@@ -75,59 +94,17 @@ public class World
             Console.ResetColor();
             Console.WriteLine();
 
-            string legenda = "Open Menu -> M";
-            string forward = "Move North -> W";
-            string left = "Move West -> A";
-            string backward = "Move South -> S";
-            string right = "Move East -> D";
-            Console.SetCursorPosition(Console.WindowWidth - legenda.Length, 0);
-            Console.Write(legenda);
-            Console.SetCursorPosition(Console.WindowWidth - forward.Length, 1);
-            Console.Write(forward);
-            Console.SetCursorPosition(Console.WindowWidth - left.Length, 2);
-            Console.Write(left);
-            Console.SetCursorPosition(Console.WindowWidth - backward.Length, 3);
-            Console.Write(backward);
-            Console.SetCursorPosition(Console.WindowWidth - right.Length, 4);
-            Console.Write(right);
-
+            PrintLegenda();
 
             key = Console.ReadKey(true).Key;
 
             if (key == ConsoleKey.M)
             {
                 Menu.Start();
+                return;
             }
-            else if (key == ConsoleKey.W && currentLocation.North != null)
-            {
-                currentLocation = currentLocation.North;
-                player.currentLocation = currentLocation;
-                //Map.home = currentLocation.Name;
-
-            }
-            else if (key == ConsoleKey.S && currentLocation.South != null)
-            {
-                currentLocation = currentLocation.South;
-                player.currentLocation = currentLocation;
-                // Console.WriteLine("Moving South");
-                // Console.ReadKey(true);
-
-            }
-            else if (key == ConsoleKey.D && currentLocation.East != null)
-            {
-                currentLocation = currentLocation.East;
-                player.currentLocation = currentLocation;
-                // Console.WriteLine("Moving East");
-                // //Console.ReadKey(true);
-            }
-            else if (key == ConsoleKey.A && currentLocation.West != null)
-            {
-                currentLocation = currentLocation.West;
-                player.currentLocation = currentLocation;
-                // Console.WriteLine("Moving West");
-                // Console.ReadKey(true);
-
-            }
+            currentLocation = Movement(currentLocation, key);
+            player.currentLocation = currentLocation;
         }
         while (true);
     }
@@ -136,6 +113,52 @@ public class World
 gebruiken als index voor list
 
 */
+
+    //aparte method anders start te groot
+    public static Location Movement(Location currentLocation, ConsoleKey key)
+    {
+            if (key == ConsoleKey.W && currentLocation.North != null)
+            {
+                return currentLocation.North;
+            }
+            else if (key == ConsoleKey.S && currentLocation.South != null)
+            {
+                return currentLocation.South;
+
+            }
+            else if (key == ConsoleKey.D && currentLocation.East != null)
+            {
+                return currentLocation.East;
+            }
+            else if (key == ConsoleKey.A && currentLocation.West != null)
+            {
+                return currentLocation.West;
+            }
+            return currentLocation;
+    }
+
+
+    public static void PrintLegenda()
+    {
+        string legenda = "Open Menu -> M";
+        string forward = "Move North -> W";
+        string left = "Move West -> A";
+        string backward = "Move South -> S";
+        string right = "Move East -> D";
+        Console.SetCursorPosition(Console.WindowWidth - legenda.Length, 0);
+        Console.Write(legenda);
+        Console.SetCursorPosition(Console.WindowWidth - forward.Length, 1);
+        Console.Write(forward);
+        Console.SetCursorPosition(Console.WindowWidth - left.Length, 2);
+        Console.Write(left);
+        Console.SetCursorPosition(Console.WindowWidth - backward.Length, 3);
+        Console.Write(backward);
+        Console.SetCursorPosition(Console.WindowWidth - right.Length, 4);
+        Console.Write(right);
+        Console.SetCursorPosition(Console.WindowWidth - right.Length, 5);
+        Console.Write("+ ---------- +");
+    }
+
     public static void SpawnMonster()
     {
         Random random = new();
