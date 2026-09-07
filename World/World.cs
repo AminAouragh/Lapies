@@ -19,14 +19,14 @@ public class World
     public const int QUEST_ID_COLLECT_SPIDER_SILK = 3;
 
     //Locations
-    public static Location home = new("Home");
-    public static Location ocean = new("Ocean");
-    public static Location grassland = new("Grassland");
-    public static Location forest = new("Forest");
-    public static Location town = new("Town");
-    public static Location iceland = new("Iceland");
-    public static Location canute = new("Canute");
-    public static Location vinland = new("Vinland");
+    public static Location Home = new("Home");
+    public static Location Ocean = new("Ocean");
+    public static Location Grassland = new("Grassland");
+    public static Location Forest = new("Forest");
+    public static Location Town = new("Town");
+    public static Location Iceland = new("Iceland");
+    public static Location Canute = new("Canute");
+    public static Location Vinland = new("Vinland");
 
     // public const int LOCATION_ID_HOME = 1;
     // public const int LOCATION_ID_TOWN_SQUARE = 2;
@@ -53,25 +53,27 @@ public class World
     public static void Start(Player player)
     {
         //movement van punt a -> b
-        home.North = ocean; // quest van thors to move to north, npc = thors
-        home.South = grassland;
-        home.East = iceland;
-        home.West = town;
+        Forest.East = Town;
+        Town.West = Forest;
 
-        town.East = home;
-        town.West = forest;
+        Town.North = Home;
+        Town.East = Home;
+        Home.West = Town;
 
-        forest.East = town;
-        ocean.South = home;
-        grassland.North = home;
+        Home.East = Iceland;
+        Iceland.West = Home;
 
-        iceland.East = canute;
-        iceland.West = home;
+        Iceland.East = Canute;
+        Canute.West = Iceland;
 
-        canute.East = vinland;
-        canute.West = iceland;
+        Grassland.North = Home;
+        Home.South = Grassland;
 
-        vinland.West = canute;
+        Home.North = Ocean;
+        Ocean.South = Home;
+
+        Ocean.North = Vinland;
+        Vinland.South = Ocean;
 
         //test movement
         Console.ForegroundColor = ConsoleColor.Blue;
@@ -117,24 +119,36 @@ gebruiken als index voor list
     //aparte method anders start te groot
     public static Location Movement(Location currentLocation, ConsoleKey key)
     {
-            if (key == ConsoleKey.W && currentLocation.North != null)
-            {
-                return currentLocation.North;
-            }
-            else if (key == ConsoleKey.S && currentLocation.South != null)
-            {
-                return currentLocation.South;
+        Location nextLocation = key switch
+        {
+            ConsoleKey.W => currentLocation.North,
+            ConsoleKey.S => currentLocation.South,
+            ConsoleKey.D => currentLocation.East,
+            ConsoleKey.A => currentLocation.West,
+            _ => null
+        };
 
-            }
-            else if (key == ConsoleKey.D && currentLocation.East != null)
-            {
-                return currentLocation.East;
-            }
-            else if (key == ConsoleKey.A && currentLocation.West != null)
-            {
-                return currentLocation.West;
-            }
-            return currentLocation;
+        if (nextLocation != null)
+        {
+            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
+            return nextLocation;
+        }
+        else if (nextLocation != null)
+        {
+            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
+            return nextLocation;
+        }
+        else if (nextLocation != null)
+        {
+            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
+            return nextLocation;
+        }
+        else if (nextLocation != null)
+        {
+            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
+            return nextLocation;
+        }
+        return currentLocation;
     }
 
 
