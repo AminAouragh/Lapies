@@ -17,6 +17,7 @@ public class Player
         Name = name;
         HP = 100;
         XP = 0;
+        inventory = new Inventory(this);
         weapon = new Weapon(10);
         QuestsDone = 0;
         EnemiesDefeated = 0;
@@ -32,8 +33,6 @@ public class Player
             Console.WriteLine("Username");
             Console.Write("> ");
             username = Console.ReadLine();
-
-            //validatie
         }
         while (string.IsNullOrEmpty(username));
 

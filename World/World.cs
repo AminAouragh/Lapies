@@ -1,6 +1,6 @@
 public class World
 {
-    public Player Player;
+    public static Player Player;
     public static readonly List<Weapon> Weapons = new List<Weapon>();
     public static readonly List<Monster> Monsters = new List<Monster>();
     public static readonly List<Quest> Quests = new List<Quest>();
@@ -43,7 +43,6 @@ public class World
     public World(Player player)
     {
         Player = player;
-        // PopulateWeapons();
         // PopulateMonsters();
         // PopulateQuests();
         // PopulateLocations();
@@ -52,6 +51,7 @@ public class World
 
     public static void Start(Player player)
     {
+        PopulateWeapons(player);
         //movement van punt a -> b
         Forest.East = Town;
         Town.West = Forest;
@@ -199,14 +199,12 @@ gebruiken als index voor list
 
         Battlesystem.StartBattle(player, monster);
     }
+
+    public static void PopulateWeapons(Player player)
+    {
+        player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
+    }
 }
-
-
-//     public static void PopulateWeapons()
-//     {
-//         Weapons.Add(new Weapon(WEAPON_ID_RUSTY_SWORD, "Rusty sword", 5));
-//         Weapons.Add(new Weapon(WEAPON_ID_CLUB, "Club", 10));
-//     }
 
 //     public static void PopulateMonsters()
 //     {
