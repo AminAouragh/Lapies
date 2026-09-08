@@ -18,6 +18,7 @@ public class Player
         HP = 100;
         XP = 0;
         inventory = new Inventory(this);
+        weapon = new Weapon(10);
         QuestsDone = 0;
         EnemiesDefeated = 0;
     }

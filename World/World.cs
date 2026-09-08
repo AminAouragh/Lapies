@@ -183,14 +183,21 @@ gebruiken als index voor list
 
     }
 
-    public static void SpawnMonster()
+    public static void SpawnMonster(Player player)
     {
-        Random random = new();
-        int rand = random.Next(0, 2);
-        if (rand == 1)
+        if (RandomGenerator.Next(100) >= 35)
         {
-            Monster ngr = new Monster("jew", 150);
+            return;
         }
+
+        Monster monster = RandomGenerator.Next(3) switch
+        {
+            0 => new Monster("rat", 30, 5),
+            1 => new Monster("snake", 45, 8),
+            _ => new Monster("giant spider", 60, 10)
+        };
+
+        Battlesystem.StartBattle(player, monster);
     }
 
     public static void PopulateWeapons(Player player)
