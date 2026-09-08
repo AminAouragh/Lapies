@@ -165,14 +165,92 @@ public class World
 gebruiken als index voor list
 
 */
+<<<<<<< Updated upstream
     public static void SpawnMonster()
+=======
+
+    //aparte method anders start te groot
+    public static Location Movement(Location currentLocation, ConsoleKey key)
     {
-        Random random = new();
-        int rand = random.Next(0, 2);
-        if (rand == 1)
+        Location nextLocation = key switch
         {
-            Monster ngr = new Monster("jew", 150);
+            ConsoleKey.W => currentLocation.North,
+            ConsoleKey.S => currentLocation.South,
+            ConsoleKey.D => currentLocation.East,
+            ConsoleKey.A => currentLocation.West,
+            _ => null
+        };
+
+        if (nextLocation != null)
+        {
+            Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
+            Console.ReadKey(true);
+            return nextLocation;
         }
+        return currentLocation;
+    }
+
+
+    public static void PrintLegenda()
+    {
+        string legenda = "Open Menu -> M";
+        string forward = "Move North -> W";
+        string left = "Move West -> A";
+        string backward = "Move South -> S";
+        string right = "Move East -> D";
+        Console.SetCursorPosition(Console.WindowWidth - legenda.Length, 0);
+        Console.Write(legenda);
+        Console.SetCursorPosition(Console.WindowWidth - forward.Length, 1);
+        Console.Write(forward);
+        Console.SetCursorPosition(Console.WindowWidth - left.Length, 2);
+        Console.Write(left);
+        Console.SetCursorPosition(Console.WindowWidth - backward.Length, 3);
+        Console.Write(backward);
+        Console.SetCursorPosition(Console.WindowWidth - right.Length, 4);
+        Console.Write(right);
+        Console.SetCursorPosition(Console.WindowWidth - right.Length, 5);
+        Console.Write("+ ---------- +");
+    }
+
+    public static void PrintCompass()
+    {
+        int width = 9;
+        int startY = Console.WindowHeight - 6;
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY);
+        Console.Write("    N");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 1);
+        Console.Write("    |");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 2);
+        Console.Write("W - + - E");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 3);
+        Console.Write("    |");
+
+        Console.SetCursorPosition(Console.WindowWidth - width, startY + 4);
+        Console.Write("    S");
+        Console.WriteLine();
+
+    }
+
+    public static void SpawnMonster(Player player)
+>>>>>>> Stashed changes
+    {
+        if (RandomGenerator.Next(100) >= 35)
+        {
+            return;
+        }
+
+        Monster monster = RandomGenerator.Next(3) switch
+        {
+            0 => new Monster("rat", 30, 5),
+            1 => new Monster("snake", 45, 8),
+            _ => new Monster("giant spider", 60, 10)
+        };
+
+        Battlesystem.StartBattle(player, monster);
     }
 }
 
