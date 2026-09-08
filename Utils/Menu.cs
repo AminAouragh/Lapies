@@ -47,9 +47,8 @@ public static class Menu
                     Console.WriteLine("Inventory opened");
                     player.inventory.Open();
                     Console.ResetColor();
-                    Console.ReadKey(true);
-
                     break;
+                    
                 case 2:
                     if (player is null)
                     {
