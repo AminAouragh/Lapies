@@ -165,9 +165,6 @@ public class World
 gebruiken als index voor list
 
 */
-<<<<<<< Updated upstream
-    public static void SpawnMonster()
-=======
 
     //aparte method anders start te groot
     public static Location Movement(Location currentLocation, ConsoleKey key)
@@ -236,7 +233,6 @@ gebruiken als index voor list
     }
 
     public static void SpawnMonster(Player player)
->>>>>>> Stashed changes
     {
         if (RandomGenerator.Next(100) >= 35)
         {
