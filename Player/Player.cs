@@ -17,6 +17,7 @@ public class Player
         Name = name;
         HP = 100;
         XP = 0;
+        weapon = new Weapon(10);
         QuestsDone = 0;
         EnemiesDefeated = 0;
     }
