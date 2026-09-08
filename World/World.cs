@@ -91,13 +91,13 @@ public class World
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"You are in the {currentLocation.Name} area.");
+            Console.Write($"You are in the {currentLocation.Name} area.");
             Console.ResetColor();
-            Console.WriteLine();
+            //Console.WriteLine();
 
             PrintLegenda();
             PrintCompass();
-            Console.SetCursorPosition(0, 11);
+            Console.SetCursorPosition(0, 4);
 
             key = Console.ReadKey(true).Key;
 
