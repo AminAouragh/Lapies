@@ -1,6 +1,6 @@
 public class World
 {
-    Player Player;
+    public Player Player;
     public static readonly List<Weapon> Weapons = new List<Weapon>();
     public static readonly List<Monster> Monsters = new List<Monster>();
     public static readonly List<Quest> Quests = new List<Quest>();
@@ -18,15 +18,25 @@ public class World
     public const int QUEST_ID_CLEAR_FARMERS_FIELD = 2;
     public const int QUEST_ID_COLLECT_SPIDER_SILK = 3;
 
-    public const int LOCATION_ID_HOME = 1;
-    public const int LOCATION_ID_TOWN_SQUARE = 2;
-    public const int LOCATION_ID_GUARD_POST = 3;
-    public const int LOCATION_ID_ALCHEMIST_HUT = 4;
-    public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
-    public const int LOCATION_ID_FARMHOUSE = 6;
-    public const int LOCATION_ID_FARM_FIELD = 7;
-    public const int LOCATION_ID_BRIDGE = 8;
-    public const int LOCATION_ID_SPIDER_FIELD = 9;
+    //Locations
+    public static Location Home = new("Home");
+    public static Location Ocean = new("Ocean");
+    public static Location Grassland = new("Grassland");
+    public static Location Forest = new("Forest");
+    public static Location Town = new("Town");
+    public static Location Iceland = new("Iceland");
+    public static Location Canute = new("Canute's Kingdom");
+    public static Location Vinland = new("Vinland");
+
+    // public const int LOCATION_ID_HOME = 1;
+    // public const int LOCATION_ID_TOWN_SQUARE = 2;
+    // public const int LOCATION_ID_GUARD_POST = 3;
+    // public const int LOCATION_ID_ALCHEMIST_HUT = 4;
+    // public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
+    // public const int LOCATION_ID_FARMHOUSE = 6;
+    // public const int LOCATION_ID_FARM_FIELD = 7;
+    // public const int LOCATION_ID_BRIDGE = 8;
+    // public const int LOCATION_ID_SPIDER_FIELD = 9;
 
 
 
@@ -42,26 +52,18 @@ public class World
 
     public static void Start(Player player)
     {
-        Location Home = new("Home");
-        Location Town = new("Town");
-        Location Vinland = new("Vinland");
-        Location Ocean = new("Ocean");
-        Location Forest = new("Forest");
-        Location Grassland = new("Grassland");
-        Location IceLand = new("Ice Land");
-        Location Canute = new("Kingdom Canute");
-
+        //movement van punt a -> b
         Forest.East = Town;
         Town.West = Forest;
 
         Town.East = Home;
         Home.West = Town;
 
-        Home.East = IceLand;
-        IceLand.West = Home;
+        Home.East = Iceland;
+        Iceland.West = Home;
 
-        IceLand.East = Canute;
-        Canute.West = IceLand;
+        Iceland.East = Canute;
+        Canute.West = Iceland;
 
         Grassland.North = Home;
         Home.South = Grassland;
@@ -72,6 +74,7 @@ public class World
         Ocean.North = Vinland;
         Vinland.South = Ocean;
 
+        //test movement
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(Home.Name);
         Console.ResetColor();
@@ -83,80 +86,28 @@ public class World
         {
             Console.Clear();
             Console.WriteLine($"Greetings, {player.Name}\n");
-            Console.WriteLine("GOAL OF GAME: Reach Lapis\n");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("GOAL OF GAME: Reach Lapis\n");
+            Console.ResetColor();
 
-            Console.WriteLine(currentLocation.Name);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"You are in the {currentLocation.Name} area.");
+            Console.ResetColor();
             Console.WriteLine();
 
-            string legenda = "Open Menu -> M";
-            string forward = "Move North -> W";
-            string left = "Move West -> A";
-            string backward = "Move South -> S";
-            string right = "Move East -> D";
-            Console.SetCursorPosition(Console.WindowWidth - legenda.Length, 0);
-            Console.Write(legenda);
-            Console.SetCursorPosition(Console.WindowWidth - forward.Length, 1);
-            Console.Write(forward);
-            Console.SetCursorPosition(Console.WindowWidth - left.Length, 2);
-            Console.Write(left);
-            Console.SetCursorPosition(Console.WindowWidth - backward.Length, 3);
-            Console.Write(backward);
-            Console.SetCursorPosition(Console.WindowWidth - right.Length, 4);
-            Console.Write(right);
-
+            PrintLegenda();
+            PrintCompass();
+            Console.SetCursorPosition(0, 11);
 
             key = Console.ReadKey(true).Key;
 
             if (key == ConsoleKey.M)
             {
                 Menu.Start();
+                return;
             }
-            else if (key == ConsoleKey.W)
-            {
-                if (currentLocation.North != null)
-                {
-                    currentLocation = currentLocation.North;
-                    player.currentLocation = currentLocation;
-                    Console.WriteLine($"You are now going to the {currentLocation.Name} area.");
-                }
-                else
-                {
-                    Console.WriteLine("\nYou cannot go past the Ocean for now...");
-                    Console.ReadKey(true);
-                }
-            }
-            else if (key == ConsoleKey.S)
-            {
-                if (currentLocation.South != null)
-                {
-                    currentLocation = currentLocation.South;
-                    player.currentLocation = currentLocation;
-
-                    Console.WriteLine($"You are now going to the {currentLocation.Name} area.");
-                }
-                Console.ReadKey(true);
-
-            }
-            else if (key == ConsoleKey.D)
-            {
-                if (currentLocation.East != null)
-                {
-                    currentLocation = currentLocation.East;
-                    player.currentLocation = currentLocation;
-                    Console.WriteLine($"You are now going to the {currentLocation.Name} area.");
-                }
-                Console.ReadKey(true);
-            }
-            else if (key == ConsoleKey.A)
-            {
-                if (currentLocation.West != null)
-                {
-                    currentLocation = currentLocation.West;
-                    player.currentLocation = currentLocation;
-                    Console.WriteLine($"You are now going to the {currentLocation.Name} area.");
-                }
-                Console.ReadKey(true);
-            }
+            currentLocation = Movement(currentLocation, key);
+            player.currentLocation = currentLocation;
         }
         while (true);
     }

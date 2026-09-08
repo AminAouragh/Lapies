@@ -60,7 +60,7 @@ public static class Menu
                         break;
                     }
                     Console.Clear();
-                    Map.DrawMap();
+                    Map.DrawMap(player.currentLocation);
                     Console.ReadKey(true);
                     break;
                 case 3:
