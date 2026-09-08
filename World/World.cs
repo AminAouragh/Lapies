@@ -28,6 +28,11 @@ public class World
     public static Location Canute = new("Canute's Kingdom");
     public static Location Vinland = new("Vinland");
 
+    //rewards
+    public static Item reward_rat = new("Poisen ring", "Gives you inmunite to poisen", 0,false,0);
+    public static Item reward_snake = new("Knife", "Knife to skin snakes", 5, false,0);
+    public static Item reward_monster = new("Spider eyes", "A rare prize from a deadly creature of the forest",0,false,0);
+
     // public const int LOCATION_ID_HOME = 1;
     // public const int LOCATION_ID_TOWN_SQUARE = 2;
     // public const int LOCATION_ID_GUARD_POST = 3;
@@ -95,6 +100,7 @@ public class World
             Console.ResetColor();
             Console.WriteLine();
 
+            SpawnMonster(player);
             PrintLegenda();
             PrintCompass();
             Console.SetCursorPosition(0, 11);
@@ -192,12 +198,13 @@ gebruiken als index voor list
 
         Monster monster = RandomGenerator.Next(3) switch
         {
-            0 => new Monster("rat", 30, 5),
-            1 => new Monster("snake", 45, 8),
-            _ => new Monster("giant spider", 60, 10)
+            0 => new Monster("rat", 30, 5,reward_rat),
+            1 => new Monster("snake", 45, 8,reward_snake),
+            _ => new Monster("giant spider", 60, 10,reward_monster)
         };
 
         Battlesystem.StartBattle(player, monster);
+        Monster.Add_reward(player);
     }
 
     public static void PopulateWeapons(Player player)
