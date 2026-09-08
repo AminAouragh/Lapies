@@ -209,7 +209,10 @@ gebruiken als index voor list
 
     public static void PopulateWeapons(Player player)
     {
-        player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
+        if (!player.inventory.PlayerHasItemInInventory("Sword"))
+        {
+            player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
+        }
     }
 }
 

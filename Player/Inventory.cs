@@ -3,25 +3,18 @@ public class Inventory
     public  Player Player;
     public Item Item;
 
-    public Inventory(Player player, Item item)
-    {
-        Player = player;
-        Item = item;
-    }
-
     private List<Item> items = new List<Item>();
     private Item? equippedWeapon = null;
-    private Player? owner;
-
-    public Inventory(Player? player = null)
-    {
-        owner = player;
-    }
 
     public void AddItem(Item newItem)
     {
         items.Add(newItem);
-        Console.WriteLine("You Equipped Thors his old swords");
+        Console.WriteLine($"You received: {newItem.Name}");
+    }
+
+    public bool PlayerHasItemInInventory(string item)
+    {
+        return items.Any(i => i.Name == item);
     }
 
     public void ShowInventory()
