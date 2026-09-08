@@ -45,6 +45,7 @@ public static class Menu
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("Inventory opened");
+                    player.inventory.Open();
                     Console.ResetColor();
                     Console.ReadKey(true);
 

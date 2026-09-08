@@ -47,9 +47,6 @@ public class Inventory
         return equippedWeapon;
     }
 
-    // Voor shop
-    public int Count => items.Count;
-
     public Item? GetItem(int index)
     {
         int actual = index - 1;
@@ -80,13 +77,13 @@ public class Inventory
             {
                 browsing = false;
             }
-            else if (input == "V" || input == "E" || input == "U")
+            else if (input == "V" || input == "E")
             {
                 Console.Write("Enter Item Number: ");
                 if (int.TryParse(Console.ReadLine(), out int choice))
                 {
+                    if (input == "V") ViewItemDetails(choice);
                     if (input == "E") SelectWeapon(choice);
-                    if (input == "U") UseItem(choice);
                 }
                 else
                 {
@@ -116,17 +113,16 @@ public class Inventory
         }
     }
 
-    public void UseItem(int index)
+    public void ViewItemDetails(int index)
     {
-        if (owner == null)
-            return;
-
         int actualIndex = index - 1;
         if (actualIndex >= 0 && actualIndex < items.Count)
         {
-            bool consumed = items[actualIndex].Use(owner);
-            if (consumed)
-                items.RemoveAt(actualIndex);
+            Item item = items[actualIndex];
+            Console.WriteLine($"\n--- {item.Name} ---");
+            Console.WriteLine($"Description: {item.Description}");
+            Console.WriteLine($"Damage: {item.Damage}");
+            Console.WriteLine($"Type: {(item.IsWeapon ? "Weapon" : "Utility")}");
         }
         else
         {
