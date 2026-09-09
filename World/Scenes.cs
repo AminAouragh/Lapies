@@ -42,7 +42,9 @@ public static class Scenes
 
     public static void PlayScene(Player player, string[] lines)
     {
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.WriteLine("Press enter...\n");
+        Console.ResetColor();
         foreach (string line in lines)
         {
             PrintLine(player, line);
