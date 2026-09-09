@@ -57,29 +57,9 @@ public class World
     public static void Start(Player player)
     {
         PopulateWeapons(player);
-        //movement van punt a -> b
-        Forest.East = Town;
-        Town.West = Forest;
-
-        Town.East = Home;
-        Home.West = Town;
-
-        Home.East = Iceland;
-        Iceland.West = Home;
-
-        Iceland.East = Canute;
-        Canute.West = Iceland;
-
-        Grassland.North = Home;
-        Home.South = Grassland;
-
-        Home.North = Ocean;
-        Ocean.South = Home;
-
-        Ocean.North = Vinland;
-        Vinland.South = Ocean;
-
-        //test movement
+        PopulateLocations(player);
+        PopulateNPC(player);
+        // //test movement
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine(Home.Name);
         Console.ResetColor();
@@ -89,21 +69,17 @@ public class World
         ConsoleKey key;
         do
         {
-            Console.Clear();
-            Console.WriteLine($"Greetings, {player.Name}\n");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("GOAL OF GAME: Reach Lapis\n");
-            Console.ResetColor();
-
+            // Console.Clear();
+            // Console.WriteLine($"Greetings, {player.Name}\n");
+            // Console.ForegroundColor = ConsoleColor.DarkYellow;
+            // Console.Write("GOAL OF GAME: Reach Lapis\n");
+            // Console.ResetColor();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write($"You are in the {currentLocation.Name} area.");
             Console.ResetColor();
-            //Console.WriteLine();
-
             PrintLegenda();
             PrintCompass();
             Console.SetCursorPosition(0, 4);
-            SpawnMonster(player);
 
             key = Console.ReadKey(true).Key;
 
@@ -114,6 +90,11 @@ public class World
             }
             currentLocation = Movement(currentLocation, key);
             player.currentLocation = currentLocation;
+
+            if (currentLocation == Home)
+            {
+                Scenes.Scene1(player);
+            }
         }
         while (true);
     }
@@ -211,23 +192,47 @@ gebruiken als index voor list
     {
         player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
     }
+
+    public static void PopulateNPC(Player player)
+    {
+        NPC thors = new($"Thors ({player.Name}'s father)", false, 100);
+        NPC askeladd = new("Askeladd", true, 200);
+        NPC thorkell = new("Thorkell", true, 150);
+        NPC leif = new("Leif", false, 100);
+        NPC canute = new("Canute", false, 100);
+
+        Home.NPC = thors;
+        Ocean.NPC = askeladd;
+        Iceland.NPC = thorkell;
+        Forest.NPC = leif;
+        Canute.NPC = canute;
+    }
+
+    public static void PopulateLocations(Player player)
+    {
+        Forest.East = Town;
+        Town.West = Forest;
+
+        Town.East = Home;
+        Home.West = Town;
+
+        Home.East = Iceland;
+        Iceland.West = Home;
+
+        Iceland.East = Canute;
+        Canute.West = Iceland;
+
+        Grassland.North = Home;
+        Home.South = Grassland;
+
+        Home.North = Ocean;
+        Ocean.South = Home;
+
+        Ocean.North = Vinland;
+        Vinland.South = Ocean;
+    }
+
 }
-
-//     public static void PopulateMonsters()
-//     {
-//         Monster rat = new Monster(MONSTER_ID_RAT, "rat", 1, 3, 3);
-
-
-//         Monster snake = new Monster(MONSTER_ID_SNAKE, "snake", 10, 7, 7);
-
-
-//         Monster giantSpider = new Monster(MONSTER_ID_GIANT_SPIDER, "giant spider", 3, 10, 10);
-
-
-//         Monsters.Add(rat);
-//         Monsters.Add(snake);
-//         Monsters.Add(giantSpider);
-//     }
 
 //     public static void PopulateQuests()
 //     {

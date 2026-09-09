@@ -1,20 +1,15 @@
 public class NPC
 {
     public string Name;
-    public string Description;
+    //public string Dialogue;
     public bool IsEnemy = false;
     public int HP;
 
-    public NPC(string name, string description, bool isEnemy, int hp)
+    public NPC(string name, bool isEnemy, int hp)
     {
         Name = name;
-        Description = description;
+        //Dialogue = dialogue;
         IsEnemy = isEnemy;
         HP = hp;
-    }
-
-    public void Dialogue()
-    {
-        Console.WriteLine(Description);
     }
 }
