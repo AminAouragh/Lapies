@@ -64,4 +64,40 @@ public static class Battlesystem
             Console.ReadKey(true);
         }
     }
+
+    public static void StartBattleNPC(Player player, NPC npc)
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine($"----- {player.Name} VS {npc.Name} -----");
+        Console.ResetColor();
+        ConsoleKey key;
+
+        do
+        {
+            Console.WriteLine($"{player.Name} HP: {player.HP}");
+            Console.WriteLine($"{npc.Name} HP: {npc.HP}");
+
+            Console.WriteLine("\nPress [a] to attack\n");
+            key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.A)
+            {
+                int damagePlayer = player.weapon.DealDamage(5, 15);
+                npc.TakeDamage(damagePlayer);
+
+                if (npc.IsEnemy)
+                {
+                    int damageNPC = npc.DealDamage(10, 50);
+                    player.TakeDamage(damageNPC);
+                }
+            }
+
+        }while (player.IsAlive() && npc.HP > 0);
+
+        string won = player.IsAlive()? $"{player.Name} WON!" : $"{npc.Name} WON!";
+        Console.WriteLine(won);
+        Console.ReadKey(true);
+        return;
+    }
 }

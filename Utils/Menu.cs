@@ -1,3 +1,5 @@
+using System.Media; //yo voor deze ff 'dotnet add package System.Windows.Extensions' in je terminal
+
 public static class Menu
 {
     public static bool IsPlaying = false;
@@ -6,6 +8,8 @@ public static class Menu
     public static void Start()
     {
         bool inMenu = true;
+        SoundPlayer menuSound = new SoundPlayer("Utils/Audio/menuSound.wav");
+        menuSound.PlayLooping();
         do
         {
             //bool IsPlaying = false;
@@ -48,7 +52,7 @@ public static class Menu
                     player.inventory.Open();
                     Console.ResetColor();
                     break;
-                    
+
                 case 2:
                     if (player is null)
                     {
@@ -105,6 +109,7 @@ public static class Menu
                     break;
             }
         } while (inMenu);
+        menuSound.Stop();
         World.Start(player);
     }
 }

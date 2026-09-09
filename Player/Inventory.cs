@@ -9,7 +9,7 @@ public class Inventory
     public void AddItem(Item newItem)
     {
         items.Add(newItem);
-        Console.WriteLine($"You received: {newItem.Name}");
+        //Console.WriteLine($"You received: {newItem.Name}");
     }
 
     public bool PlayerHasItemInInventory(string item)
