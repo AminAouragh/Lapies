@@ -6,6 +6,7 @@ public class Location
     public Location? East;
     public Location? West;
     public bool IsQuest;
+    public bool BeenHere = false;
     public NPC? NPC;
     public Quest? Quest;
 

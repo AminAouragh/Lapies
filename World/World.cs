@@ -56,45 +56,56 @@ public class World
 
     public static void Start(Player player)
     {
-        PopulateWeapons(player);
         PopulateLocations(player);
         PopulateNPC(player);
-        // //test movement
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(Home.Name);
-        Console.ResetColor();
-        Location currentLocation = Home;
+        PopulateWeapons(player);
+        Location currentLocation = player.currentLocation ?? Home; //die "??" staat voor als player al bij home was (dus niet null), dan laatste locatie spawn
         player.currentLocation = currentLocation;
+        if (!Home.BeenHere)
+        {
+            Scenes.Intro(player);
+            Home.BeenHere = true;
+        }
 
         ConsoleKey key;
         do
         {
-            // Console.Clear();
+            Console.Clear();
+            string location = currentLocation == Home ? "You are Home" : $"You are in the {currentLocation.Name} area";
+            bool followThors = currentLocation == Home && !Ocean.BeenHere;
+            string instruction = followThors ? "Follow Thors to the Ocean" : "";
             // Console.WriteLine($"Greetings, {player.Name}\n");
             // Console.ForegroundColor = ConsoleColor.DarkYellow;
             // Console.Write("GOAL OF GAME: Reach Lapis\n");
             // Console.ResetColor();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($"You are in the {currentLocation.Name} area.");
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.Write($"Location: {location}");
             Console.ResetColor();
+            if (instruction != "")
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"\nInstruction: {instruction}");
+                Console.ResetColor();
+            }
             PrintLegenda();
             PrintCompass();
-            Console.SetCursorPosition(0, 4);
+            Console.SetCursorPosition(0, 2);
 
             key = Console.ReadKey(true).Key;
-
             if (key == ConsoleKey.M)
             {
                 Menu.Start();
                 return;
             }
-            currentLocation = Movement(currentLocation, key);
-            player.currentLocation = currentLocation;
-
-            if (currentLocation == Home)
+            if (followThors && key != ConsoleKey.W)
             {
-                Scenes.Scene1(player);
+                Console.WriteLine("Thors did not go that way, open up your map if you're lost");
+                Console.ReadKey(true);
+                continue;
             }
+            currentLocation = Movement(currentLocation, key);
+            currentLocation = SceneInAction(player, currentLocation, currentLocation.BeenHere);
+            player.currentLocation = currentLocation;
         }
         while (true);
     }
@@ -103,6 +114,30 @@ public class World
 gebruiken als index voor list
 
 */
+    public static Location SceneInAction(Player player, Location current, bool beenHere)
+    {
+        if (current == Ocean && beenHere == false)
+        {
+            Scenes.OceanBattle(player);
+            Console.Clear();
+            Scenes.ThorsDeath(player);
+            player.currentLocation = Grassland;
+            current.BeenHere = true;
+            return Grassland;
+        }
+        else if (current == Grassland && beenHere == false)
+        {
+            Scenes.PlayerNPCBattle(player);
+            Battlesystem.StartBattleNPC(player, Grassland.NPC);
+            Console.Clear();
+            Scenes.PlayerLossNPC(player);
+            current.BeenHere = true;
+            player.HP = 23;
+            player.currentLocation = Forest;
+            return Forest;
+        }
+        return current;
+    }
 
     //aparte method anders start te groot
     public static Location Movement(Location currentLocation, ConsoleKey key)
@@ -190,13 +225,17 @@ gebruiken als index voor list
 
     public static void PopulateWeapons(Player player)
     {
-        player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
+        if (!player.inventory.PlayerHasItemInInventory("Sword"))
+        {
+            player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
+        }
     }
 
     public static void PopulateNPC(Player player)
     {
         NPC thors = new($"Thors ({player.Name}'s father)", false, 100);
         NPC askeladd = new("Askeladd", true, 200);
+        NPC askeladd_Unbeatable = new("Askeladd", true, 1000);
         NPC thorkell = new("Thorkell", true, 150);
         NPC leif = new("Leif", false, 100);
         NPC canute = new("Canute", false, 100);
@@ -206,6 +245,7 @@ gebruiken als index voor list
         Iceland.NPC = thorkell;
         Forest.NPC = leif;
         Canute.NPC = canute;
+        Grassland.NPC = askeladd_Unbeatable;
     }
 
     public static void PopulateLocations(Player player)
