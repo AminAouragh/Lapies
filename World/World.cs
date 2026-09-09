@@ -100,10 +100,10 @@ public class World
             Console.ResetColor();
             //Console.WriteLine();
 
-            SpawnMonster(player);
             PrintLegenda();
             PrintCompass();
             Console.SetCursorPosition(0, 4);
+            SpawnMonster(player);
 
             key = Console.ReadKey(true).Key;
 
