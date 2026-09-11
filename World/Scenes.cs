@@ -11,14 +11,15 @@ public static class Scenes
         { $"PLAYER", ConsoleColor.Cyan }
     };
 
-    public static void PrintLine(Player player, string line)
+    public static string PrintLine(Player player, string line)
     {
+        string continueOn = "";
         if (line.StartsWith("["))
         {
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine(line);
             Console.ResetColor();
-            return;
+            return null;
         }
         int index = line.IndexOf(':');
         string speaker = index == -1 ? "" : line.Substring(0, index).Trim(); //pakt gwn de naam alleen als er ":" is, zo niet, skot line
@@ -36,14 +37,17 @@ public static class Scenes
         }
         else
         {
+            continueOn = line;
             Console.WriteLine(line);
         }
+        return continueOn;
     }
 
     public static void PlayScene(Player player, string[] lines)
     {
         Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.WriteLine("Press enter...\n");
+        Console.WriteLine("After each line press [Enter] to show the next line");
+        Console.WriteLine("Or press [Spacebar] to skip to the end of this scene\n");
         Console.ResetColor();
         foreach (string line in lines)
         {
@@ -53,9 +57,20 @@ public static class Scenes
             do
             {
                 key = Console.ReadKey(true).Key;
+
+            } while (key != ConsoleKey.Enter && key != ConsoleKey.Spacebar);
+
+            if (key == ConsoleKey.Spacebar)
+            {
+                int index = Array.IndexOf(lines, line);
+                for (int i = index + 1; i < lines.Length; i++)
+                {
+                    PrintLine(player, lines[i]);
+                }
+                Console.ReadKey(true);
+                break;
             }
-            while (key != ConsoleKey.Enter);
-        }
+            }
     }
 
     public static void Intro(Player player)

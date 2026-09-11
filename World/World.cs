@@ -58,7 +58,6 @@ public class World
     {
         PopulateLocations(player);
         PopulateNPC(player);
-        PopulateWeapons(player);
         Location currentLocation = player.currentLocation ?? Home; //die "??" staat voor als player al bij home was (dus niet null), dan laatste locatie spawn
         player.currentLocation = currentLocation;
         if (!Home.BeenHere)
@@ -129,6 +128,7 @@ gebruiken als index voor list
         {
             Scenes.PlayerNPCBattle(player);
             Battlesystem.StartBattleNPC(player, Grassland.NPC);
+            PopulateWeapons(player);
             Console.Clear();
             Scenes.PlayerLossNPC(player);
             current.BeenHere = true;
