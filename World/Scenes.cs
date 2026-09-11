@@ -45,7 +45,7 @@ public static class Scenes
 
     public static void PlayScene(Player player, string[] lines)
     {
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.WriteLine("After each line press [Enter] to show the next line");
         Console.WriteLine("Or press [Spacebar] to skip to the end of this scene\n");
         Console.ResetColor();
@@ -164,6 +164,24 @@ public static class Scenes
             "[You pass out...]"
         };
 
+        PlayScene(player, lines);
+    }
+
+    public static void LeifIntro(Player player)
+    {
+        Console.Clear();
+        string[] lines =
+        {
+            "[You hear something echo'ing and open your eyes slowly after passing out]",
+            $"LEIF:      Gods above — {player.Name}? {player.Name}!",
+            "LEIF:      Six days I've been walking these woods. Six.",
+            "LEIF:      Your mother hasn't slept since the shore. Your sister asks about you every single morning\nand I've run out of lies.",
+            "PLAYER:    I'm not going back.",
+            "LEIF:      You're bleeding through your shirt and you weigh less than my anchor rope.",
+            "[You're still frustated and in anger so you don't speak]",
+            "LEIF:      You're going as far as the town, and you're eating something, and then you can argue with me.",
+            "LEIF:      ...Stay close. The wolves have been bold this winter and I'm no fighter."
+        };
         PlayScene(player, lines);
     }
 }

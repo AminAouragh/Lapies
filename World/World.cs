@@ -109,10 +109,6 @@ public class World
         while (true);
     }
 
-/* mijn idee, miss list met random monsters en dan random nummer door random laten generaten en
-gebruiken als index voor list
-
-*/
     public static Location SceneInAction(Player player, Location current, bool beenHere)
     {
         if (current == Ocean && beenHere == false)
@@ -136,12 +132,25 @@ gebruiken als index voor list
             player.currentLocation = Forest;
             return Forest;
         }
+        else if (current == Forest && beenHere == false)
+        {
+            Scenes.LeifIntro(player);
+            // quest 1 komt hier, als quest gehaald dan quest.IsDone == true en dan pas kan hij door naar Town;
+            current.BeenHere = true;
+            return Forest;
+        }
         return current;
     }
 
     //aparte method anders start te groot
     public static Location Movement(Location currentLocation, ConsoleKey key)
     {
+
+        if (key != ConsoleKey.W && key != ConsoleKey.A && key != ConsoleKey.S && key != ConsoleKey.D)
+        {
+            return currentLocation; // dit omdat anders elke andere key voor output zorgt
+        }
+
         Location nextLocation = key switch
         {
             ConsoleKey.W => currentLocation.North,
@@ -150,13 +159,16 @@ gebruiken als index voor list
             ConsoleKey.A => currentLocation.West,
             _ => null
         };
-
         if (nextLocation != null)
         {
             Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
             Console.ReadKey(true);
             return nextLocation;
         }
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine("There's nothing that way");
+        Thread.Sleep(350); // vorige project gebruikt voor user blocked, laat alleen text zien voor zoveel miliseconden
+        Console.ResetColor();
         return currentLocation;
     }
 
