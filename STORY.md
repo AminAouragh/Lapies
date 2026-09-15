@@ -136,6 +136,7 @@ LEIF:      ...Stay close. The wolves have been bold this winter and I'm no fight
 *Trigger: completing Quest 1.*
 
 ```
+LEIF:      You really got stronger huh, {player.Name}
 LEIF:      Sit down. There's something of your father's I've been carrying
            longer than you've been alive.
 

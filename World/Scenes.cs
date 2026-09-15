@@ -11,14 +11,15 @@ public static class Scenes
         { $"PLAYER", ConsoleColor.Cyan }
     };
 
-    public static void PrintLine(Player player, string line)
+    public static string PrintLine(Player player, string line)
     {
+        string continueOn = "";
         if (line.StartsWith("["))
         {
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine(line);
             Console.ResetColor();
-            return;
+            return null;
         }
         int index = line.IndexOf(':');
         string speaker = index == -1 ? "" : line.Substring(0, index).Trim(); //pakt gwn de naam alleen als er ":" is, zo niet, skot line
@@ -36,14 +37,17 @@ public static class Scenes
         }
         else
         {
+            continueOn = line;
             Console.WriteLine(line);
         }
+        return continueOn;
     }
 
     public static void PlayScene(Player player, string[] lines)
     {
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-        Console.WriteLine("Press enter...\n");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("After each line press [Enter] to show the next line");
+        Console.WriteLine("Or press [Spacebar] to skip to the end of this scene\n");
         Console.ResetColor();
         foreach (string line in lines)
         {
@@ -53,9 +57,20 @@ public static class Scenes
             do
             {
                 key = Console.ReadKey(true).Key;
+
+            } while (key != ConsoleKey.Enter && key != ConsoleKey.Spacebar);
+
+            if (key == ConsoleKey.Spacebar)
+            {
+                int index = Array.IndexOf(lines, line);
+                for (int i = index + 1; i < lines.Length; i++)
+                {
+                    PrintLine(player, lines[i]);
+                }
+                Console.ReadKey(true);
+                break;
             }
-            while (key != ConsoleKey.Enter);
-        }
+            }
     }
 
     public static void Intro(Player player)
@@ -149,6 +164,24 @@ public static class Scenes
             "[You pass out...]"
         };
 
+        PlayScene(player, lines);
+    }
+
+    public static void LeifIntro(Player player)
+    {
+        Console.Clear();
+        string[] lines =
+        {
+            "[You hear something echo'ing and open your eyes slowly after passing out]",
+            $"LEIF:      Gods above — {player.Name}? {player.Name}!",
+            "LEIF:      Six days I've been walking these woods. Six.",
+            "LEIF:      Your mother hasn't slept since the shore. Your sister asks about you every single morning\nand I've run out of lies.",
+            "PLAYER:    I'm not going back.",
+            "LEIF:      You're bleeding through your shirt and you weigh less than my anchor rope.",
+            "[You're still frustated and in anger so you don't speak]",
+            "LEIF:      You're going as far as the town, and you're eating something, and then you can argue with me.",
+            "LEIF:      ...Stay close. The wolves have been bold this winter and I'm no fighter."
+        };
         PlayScene(player, lines);
     }
 }

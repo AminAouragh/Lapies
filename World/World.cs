@@ -58,7 +58,6 @@ public class World
     {
         PopulateLocations(player);
         PopulateNPC(player);
-        PopulateWeapons(player);
         Location currentLocation = player.currentLocation ?? Home; //die "??" staat voor als player al bij home was (dus niet null), dan laatste locatie spawn
         player.currentLocation = currentLocation;
         if (!Home.BeenHere)
@@ -110,10 +109,6 @@ public class World
         while (true);
     }
 
-/* mijn idee, miss list met random monsters en dan random nummer door random laten generaten en
-gebruiken als index voor list
-
-*/
     public static Location SceneInAction(Player player, Location current, bool beenHere)
     {
         if (current == Ocean && beenHere == false)
@@ -129,11 +124,19 @@ gebruiken als index voor list
         {
             Scenes.PlayerNPCBattle(player);
             Battlesystem.StartBattleNPC(player, Grassland.NPC);
+            PopulateWeapons(player);
             Console.Clear();
             Scenes.PlayerLossNPC(player);
             current.BeenHere = true;
             player.HP = 23;
             player.currentLocation = Forest;
+            return Forest;
+        }
+        else if (current == Forest && beenHere == false)
+        {
+            Scenes.LeifIntro(player);
+            // quest 1 komt hier, als quest gehaald dan quest.IsDone == true en dan pas kan hij door naar Town;
+            current.BeenHere = true;
             return Forest;
         }
         return current;
@@ -142,6 +145,12 @@ gebruiken als index voor list
     //aparte method anders start te groot
     public static Location Movement(Location currentLocation, ConsoleKey key)
     {
+
+        if (key != ConsoleKey.W && key != ConsoleKey.A && key != ConsoleKey.S && key != ConsoleKey.D)
+        {
+            return currentLocation; // dit omdat anders elke andere key voor output zorgt
+        }
+
         Location nextLocation = key switch
         {
             ConsoleKey.W => currentLocation.North,
@@ -150,13 +159,16 @@ gebruiken als index voor list
             ConsoleKey.A => currentLocation.West,
             _ => null
         };
-
         if (nextLocation != null)
         {
             Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
             Console.ReadKey(true);
             return nextLocation;
         }
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine("There's nothing that way");
+        Thread.Sleep(350); // vorige project gebruikt voor user blocked, laat alleen text zien voor zoveel miliseconden
+        Console.ResetColor();
         return currentLocation;
     }
 
