@@ -111,34 +111,54 @@ public class World
 
     public static Location SceneInAction(Player player, Location current, bool beenHere)
     {
-        if (current == Ocean && beenHere == false)
+        bool sceneTriggered = true;
+
+        while (sceneTriggered)
         {
-            Scenes.OceanBattle(player);
-            Console.Clear();
-            Scenes.ThorsDeath(player);
-            player.currentLocation = Grassland;
-            current.BeenHere = true;
-            return Grassland;
+            sceneTriggered = false;
+
+            if (current == Ocean && beenHere == false)
+            {
+                Scenes.OceanBattle(player);
+                Console.Clear();
+                Scenes.ThorsDeath(player);
+                current.BeenHere = true;
+
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"You are now going to the {Grassland.Name} area.");
+                Console.ResetColor();
+                Thread.Sleep(1000);
+
+                current = Grassland;
+                sceneTriggered = true;
+            }
+            else if (current == Grassland && beenHere == false)
+            {
+                Scenes.PlayerNPCBattle(player);
+                Battlesystem.StartBattleNPC(player, Grassland.NPC);
+                PopulateWeapons(player);
+                Console.Clear();
+                Scenes.PlayerLossNPC(player);
+                current.BeenHere = true;
+                player.HP = 23;
+
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.WriteLine($"You are now going to the {Forest.Name} area.");
+                Console.ResetColor();
+                Thread.Sleep(1000);
+
+                current = Forest;
+                sceneTriggered = true;
+            }
+            else if (current == Forest && beenHere == false)
+            {
+                Scenes.LeifIntro(player);
+                current.BeenHere = true;
+            }
         }
-        else if (current == Grassland && beenHere == false)
-        {
-            Scenes.PlayerNPCBattle(player);
-            Battlesystem.StartBattleNPC(player, Grassland.NPC);
-            PopulateWeapons(player);
-            Console.Clear();
-            Scenes.PlayerLossNPC(player);
-            current.BeenHere = true;
-            player.HP = 23;
-            player.currentLocation = Forest;
-            return Forest;
-        }
-        else if (current == Forest && beenHere == false)
-        {
-            Scenes.LeifIntro(player);
-            // quest 1 komt hier, als quest gehaald dan quest.IsDone == true en dan pas kan hij door naar Town;
-            current.BeenHere = true;
-            return Forest;
-        }
+
         return current;
     }
 
