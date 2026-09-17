@@ -184,4 +184,194 @@ public static class Scenes
         };
         PlayScene(player, lines);
     }
+
+    public static void After_quest1_story1(Player player)
+    {
+        Console.Clear();
+        string[] lines = 
+        {
+            $"LEIF:      You really got stronger huh, {player.Name}",
+            "LEIF:      Sit down. There's something of your father's I've been carrying",
+            "longer than you've been alive.",
+            "[A small chest. Older than it looks. Inside: throwing knives, wrapped in oiled cloth.]",
+            "LEIF:      He handed me these before you were born. Said he'd no use for them.",
+            "LEIF:      Said that if he ever came asking for them back, I was to refuse him.",
+            "PLAYER:    ...Did he ever ask?",
+            "LEIF:      Not once. Eleven years, not once.",
+            "PLAYER:    Then he won't mind me taking them.",
+            $"LEIF:      {player.Name}—",
+            "PLAYER:    He wasn't beaten, Leif. He was shot. There's a difference and",
+                    "everyone on that beach knows it."
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_your_mother_and_sister(Player player)
+    {
+        Console.Clear();
+        string [] lines = 
+        {
+            "[Your mother doesn't shout. Somehow that's worse.]",
+            "[Your sister just holds onto your sleeve and won't let go of it.]",
+
+            "PLAYER:    I'm going after him.",
+            "PLAYER:    He didn't beat father. He had archers in the treeline the whole time.",
+            "PLAYER:    That wasn't a duel, it was a trap dressed up as one.",
+            "PLAYER:    A duel means something. He took that from us as well.",
+            "PLAYER:    I'll find him and I'll do it properly. Face to face, where people can see.",
+            "PLAYER:    ...Tell her I'm coming back.",
+            "LEIF:      Tell her yourself. Afterwards.",
+            "LEIF:      There's a ship at dawn. Iceland first — that's where the news goes",
+            "before it goes anywhere else."
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_Thorkell(Player player)
+    {
+    Console.Clear();
+    string [] lines = 
+        {
+            "[The biggest man you have ever seen is laughing at something that isn't funny.]",
+
+            "THORKELL:  HA! Look at this one!",
+            "THORKELL:  Half the size of my men and he's the only one who didn't step back.",
+            "PLAYER:    I'm looking for Askeladd.",
+            "THORKELL:  Everyone's looking for Askeladd. Slippery little Welsh liar,",
+                    "never where he says he'll be.",
+            "THORKELL:  Tell you what, small one. You're going to die out there regardless.",
+            "THORKELL:  So give me a proper fight first. If you're upright afterwards,",
+                    "I'll tell you exactly where he's sailing.",
+            "PLAYER:    And if I'm not upright?",
+            "THORKELL:  Then you were never getting near him anyway and I've saved you the trip!",
+            "THORKELL:  Either way I win! COME ON!"
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_after_quest2(Player player)
+    {
+        Console.Clear();
+        string [] lines = 
+        {
+            "THORKELL:  ...HAHAHA! GOOD! That was GOOD!",
+            "THORKELL:  You've got your father's footwork. Did you know that?",
+            "I fought him once. Lost. Best day of my life.",
+            "THORKELL:  Askeladd's sailing with the prince now. Canute. Pale little thing,",
+            "prays more than he speaks.",
+            "THORKELL:  Find the king, you'll find the prince. Find the prince,",
+            "you'll find your Welshman.",
+            "THORKELL:  And boy — the king's a dead man. He just hasn't been told."
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_the_throne(Player player)
+    {
+        Console.Clear();
+        string [] lines =
+        {
+            "CANUTE:    You're not one of my father's men.",
+            "PLAYER:    No.",
+            "CANUTE:    Good. My father's men are the ones I'm frightened of.",
+            "CANUTE:    Stay near me tonight. Please. There's no one else I can ask,",
+            "and asking is all I have.",
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_after_quest3(Player player)
+    {
+        Console.Clear();
+        string [] lines =
+        {
+        "[The hall doors open. You know the shape before you see the face.]",
+
+        "ASKELADD:  Hello again. You got taller.",
+
+        "[He doesn't come for you. He walks straight past — toward the throne.]",
+
+        "ASKELADD:  Apologies, Your Majesty. Nothing personal in it.",
+        "ASKELADD:  This one's for Wales.",
+
+        "[The king falls. The guards are already moving.]",
+
+        "ASKELADD:  CANUTE! BE A KING!",
+        "ASKELADD:  BE A BETTER ONE THAN HE WAS!",
+
+        "[Twenty blades. It takes far less time than you spent imagining it.]",
+        };
+        PlayScene(player,lines);
+    }
+    
+
+    public static void Story_the_last_conversation(Player player)
+    {
+        Console.Clear();
+        string [] lines =
+        {
+            "PLAYER:    No. No — get up. GET UP.",
+            "PLAYER:    That was mine. That death was MINE.",
+            "ASKELADD:  ...heh. Sorry, kid.",
+            "PLAYER:    Eleven years. I followed you for eleven years.",
+            "ASKELADD:  I know. I let you.",
+            "PLAYER:    ...Why?",
+            "ASKELADD:  Because your father asked me something on that beach",
+                    "and I never came up with an answer.",
+            "ASKELADD:  He said a real warrior's got no need of a sword.",
+            "ASKELADD:  I've carried that around longer than you've carried me.",
+            "ASKELADD:  Go and find out what he meant.",
+            "ASKELADD:  I never managed it.",
+
+            "[He's gone. You are still holding your father's knives.]",
+            "[They have never felt heavier.]"
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_after(Player player)
+    {
+        Console.Clear();
+        string [] lines =
+        {
+        "[The water here is warm. There are no walls and nobody is counting the dead.]",
+        "[You keep reaching for a knife that you left behind on purpose,",
+        "and each time it takes a little longer to notice.]",
+
+        "You think about what your father tried to tell you on the shore.",
+        "That the man standing in front of you is never really the enemy.",
+        "That there was never anyone it would have been alright to cut down.",
+
+        "You spent eleven years trying to prove him wrong.",
+        "You never managed it. Not once. Not even with Askeladd.",
+
+        "A real warrior has no need of a sword.",
+        "You used to think that was a riddle.",
+        "You are only now working out that it was an instruction.",
+
+        "Dying was never the thing worth being afraid of.",
+        "Reaching the end still holding the blade — that was the thing."
+        };
+        PlayScene(player,lines);
+    }
+
+    public static void Story_the_end_lapies(Player player)
+    {
+        Console.Clear();
+        string [] lines = 
+        {
+            "[LAPIS]",
+
+            "No banners. No ships on the horizon. No one keeping score.",
+
+            "Somewhere a long way behind you, a man is still walking down to the water",
+            "on a flat calm morning, asking his son to come with him.",
+
+            "This time you follow him for the right reason.",
+
+
+            "             ~  THE END  ~"
+        };
+        PlayScene(player,lines);
+    }
 }
