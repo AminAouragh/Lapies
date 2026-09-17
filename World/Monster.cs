@@ -5,7 +5,7 @@ public class Monster
     public int Damage;
     public static Item? Reward;
 
-    public Monster(string name, int hp, int damage = 8, Item? reward = null)
+    public Monster(string name, int hp, int damage, Item? reward = null)
     {
         Name = name;
         HP = hp;

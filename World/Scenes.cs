@@ -188,7 +188,7 @@ public static class Scenes
     public static void After_quest1_story1(Player player)
     {
         Console.Clear();
-        string[] lines = 
+        string[] lines =
         {
             $"LEIF:      You really got stronger huh, {player.Name}",
             "LEIF:      Sit down. There's something of your father's I've been carrying",
@@ -209,10 +209,12 @@ public static class Scenes
     public static void Story_your_mother_and_sister(Player player)
     {
         Console.Clear();
-        string [] lines = 
+        string [] lines =
         {
             "[Your mother doesn't shout. Somehow that's worse.]",
             "[Your sister just holds onto your sleeve and won't let go of it.]",
+            "[Mother has fed you and you recovered and are ready to go..]",
+            "[But they aren't..]",
 
             "PLAYER:    I'm going after him.",
             "PLAYER:    He didn't beat father. He had archers in the treeline the whole time.",
@@ -230,7 +232,7 @@ public static class Scenes
     public static void Story_Thorkell(Player player)
     {
     Console.Clear();
-    string [] lines = 
+    string [] lines =
         {
             "[The biggest man you have ever seen is laughing at something that isn't funny.]",
 
@@ -252,7 +254,7 @@ public static class Scenes
     public static void Story_after_quest2(Player player)
     {
         Console.Clear();
-        string [] lines = 
+        string [] lines =
         {
             "THORKELL:  ...HAHAHA! GOOD! That was GOOD!",
             "THORKELL:  You've got your father's footwork. Did you know that?",

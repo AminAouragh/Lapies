@@ -5,6 +5,11 @@ public static class Battlesystem
 
     public static void StartBattle(Player player, Monster monster)
     {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine($"----- {player.Name} VS {monster.Name} -----");
+        Console.ResetColor();
+
         while (player.HP > 0 && monster.HP > 0)
         {
             Console.WriteLine(player.Name + ": " + player.HP + " HP");
@@ -94,6 +99,7 @@ public static class Battlesystem
             }
 
         }while (player.IsAlive() && npc.HP > 0);
+
 
         string won = player.IsAlive()? $"{player.Name} WON!" : $"{npc.Name} WON!";
         Console.WriteLine(won);
