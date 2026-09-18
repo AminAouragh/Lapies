@@ -1,15 +1,17 @@
 public class Weapon
 {
-    public int Damage;
+    public Item Item;
+    public int Damage => Item.Damage;
+    public string Name => Item.Name;
     public Random random = new();
 
-    public Weapon(int damage)
+    public Weapon(Item item)
     {
-        Damage = damage;
+        Item = item;
     }
 
-    public int DealDamage(int minimalDamage, int maximalDamage)
+    public int DealDamage(int damageWeapon)
     {
-        return random.Next(minimalDamage, maximalDamage);
+        return damageWeapon;
     }
 }

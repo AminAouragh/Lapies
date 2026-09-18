@@ -1,26 +1,26 @@
 public class Player
 {
-    // als iets const is dan hoef/kan je niet opvragen aan player toch?
-    // hoe kan je const gebruiken om het als vaste begin waarde te laten maar naar mate meer spelen, meer xp en/of quests done
     public string Name;
     public int HP;
     public int XP;
     public const int maxXP = 3000;
     public Location currentLocation;
-    public Weapon weapon;
+    public Weapon? weapon;
     public Inventory inventory;
     public int QuestsDone;
     public int EnemiesDefeated;
+    public int MonstersDefeated;
 
     public Player(string name)
     {
         Name = name;
         HP = 100;
         XP = 0;
-        inventory = new Inventory();
-        weapon = new Weapon(10);
+        inventory = new Inventory(this);
+        weapon = null;
         QuestsDone = 0;
         EnemiesDefeated = 0;
+        MonstersDefeated = 0;
     }
 
     public static Player CreatePlayer() //overleggen hoe en wat met teach
@@ -69,6 +69,7 @@ public class Player
         Console.WriteLine($"XP: {XP}/{maxXP}");
         Console.WriteLine($"Quests done: {QuestsDone}/3");
         Console.WriteLine($"Enemies defeated: {EnemiesDefeated}/5");
+        Console.WriteLine($"Monsters defeated: {MonstersDefeated}");
         Console.WriteLine();
         Console.WriteLine("Press ESC to go back");
 

@@ -74,11 +74,8 @@ public class World
             Console.Clear();
             string location = currentLocation == Home ? "You are Home" : $"You are in the {currentLocation.Name} area";
             bool followThors = currentLocation == Home && !Ocean.BeenHere;
-            instruction = followThors ? "Follow Thors to the Ocean" : "";
-            // Console.WriteLine($"Greetings, {player.Name}\n");
-            // Console.ForegroundColor = ConsoleColor.DarkYellow;
-            // Console.Write("GOAL OF GAME: Reach Lapis\n");
-            // Console.ResetColor();
+            bool followLeif = currentLocation == Home && Home.SecondTime && !Iceland.BeenHere;
+            instruction = followThors ? "Follow Thors to the Ocean" : followLeif ? "Follow leif to Iceland" : "";
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.Write($"Location: {location}");
             Console.ResetColor();
@@ -101,7 +98,13 @@ public class World
             if (followThors && key != ConsoleKey.W)
             {
                 Console.WriteLine("Thors did not go that way, open up your map if you're lost");
-                Console.ReadKey(true);
+                Thread.Sleep(500);
+                continue;
+            }
+            if (followLeif && key != ConsoleKey.D)
+            {
+                Console.WriteLine("Leif did not go that way, open up your map if you're lost");
+                Thread.Sleep(500);
                 continue;
             }
             currentLocation = Movement(currentLocation, key);
@@ -114,9 +117,6 @@ public class World
     public static Location SceneInAction(Player player, Location current, bool beenHere, bool second)
     {
         bool sceneTriggered = true;
-        bool followLeif = current == Home && !Iceland.BeenHere;
-        instruction = followLeif ? "Follow Thors to the Ocean" : "";
-
 
         while (sceneTriggered)
         {
@@ -133,7 +133,7 @@ public class World
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine($"You are now going to the {Grassland.Name} area.");
                 Console.ResetColor();
-                Thread.Sleep(1000);
+                Thread.Sleep(1300);
 
                 current = Grassland;
                 sceneTriggered = true;
@@ -142,17 +142,17 @@ public class World
             {
                 Scenes.PlayerNPCBattle(player);
                 Battlesystem.StartBattleNPC(player, Grassland.NPC);
-                PopulateWeapons(player);
+                // PopulateWeapons(player);
                 Console.Clear();
                 Scenes.PlayerLossNPC(player);
                 current.BeenHere = true;
-                player.HP = 23;
+                player.HP = 34;
 
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.DarkBlue;
                 Console.WriteLine($"You are now going to the {Forest.Name} area.");
                 Console.ResetColor();
-                Thread.Sleep(1000);
+                Thread.Sleep(1300);
                 current = Forest;
                 sceneTriggered = true;
             }
@@ -165,33 +165,22 @@ public class World
             else if(current == Town && !current.BeenHere && second == false)
             {
                 current.Quest.Protect_Leif(player);
-                if(player.IsDead())
+                Quests.Add(current.Quest);
+                if (!current.Quest.IsDone)
                 {
-                    player.currentLocation = Forest;
+                    current = Forest;
                 }
-                Scenes.After_quest1_story1(player);
-                sceneTriggered = true;
-                current.BeenHere = true;
+                else
+                {
+                    Scenes.After_quest1_story1(player);
+                    current.BeenHere = true;
+                }
             }
             else if(current == Home && current.BeenHere && !current.SecondTime && second == false)
             {
-                ConsoleKey key = Console.ReadKey(true).Key;
                 Scenes.Story_your_mother_and_sister(player);
                 player.HP = 100;
-                if (instruction != "")
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    Console.WriteLine($"\nInstruction: {instruction}");
-                    Console.ResetColor();
-                }
-                if (followLeif && key != ConsoleKey.D)
-                {
-                    Console.WriteLine("Leif did not go that way, open up your map if you're lost");
-                    Console.ReadKey(true);
-                    continue;
-                }
                 sceneTriggered = true;
-                current.BeenHere = true;
                 current.SecondTime = true;
             }
             else if(current == Iceland && !current.BeenHere && second == false)
@@ -199,6 +188,17 @@ public class World
                 Scenes.Story_Thorkell(player);
                 sceneTriggered = true;
                 current.Quest.Beat_Thorkell(player, current.NPC);
+                Quests.Add(current.Quest);
+                if (!current.Quest.IsDone)
+                {
+                    current = Home;
+                }
+                else
+                {
+                    Scenes.Story_after_quest2(player);
+                    current.BeenHere = true;
+                    sceneTriggered = true;
+                }
             }
         }
 
@@ -302,23 +302,23 @@ public class World
     {
         List<Monster> wolves = new()
         {
-            new Monster("Alpha Wolf", 20, 5, null),
-            new Monster("Wolf", 10, 2, null),
-            new Monster("Wolf", 10, 2, null),
-            new Monster("Wolf", 10, 2, null),
-            new Monster("Wolf", 10, 2, null),
+            new Monster("Alpha Wolf", 25, 5, null),
+            new Monster("Sigma Wolf", 15, 2, null),
+            new Monster("Wolf 1", 10, 2, null),
+            new Monster("Wolf 2", 10, 2, null),
+            new Monster("Wolf 3", 10, 2, null),
             new Monster("Lone Wolf", 6, 2, null)
         };
         return wolves;
     }
 
-    public static void PopulateWeapons(Player player)
-    {
-        if (!player.inventory.PlayerHasItemInInventory("Sword"))
-        {
-            player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
-        }
-    }
+    // public static void PopulateWeapons(Player player)
+    // {
+    //     if (!player.inventory.PlayerHasItemInInventory("Sword"))
+    //     {
+    //         player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
+    //     }
+    // }
 
     public static void PopulateNPC(Player player)
     {
@@ -339,13 +339,19 @@ public class World
 
     public static void PopulateQuests(Player player)
     {
-        Quest Protect_Leif = new Quest("Protect Leif", 100, player);
+        Quest Protect_Leif = new Quest("Protect Leif", "Protect Leif from the wolves", 100, player);
         Town.Quest = Protect_Leif;
 
-        Quest Beat_Thorkell = new Quest("Beat Thorkell..", 100, player);
+        Quest Beat_Thorkell = new Quest("Beat Thorkell..", "Beat Thorkell at Iceland", 100, player);
         Iceland.Quest = Beat_Thorkell;
-    }
 
+        Quest Protect_Canute = new Quest("Protect Canute", "Protect Canute from Askeladd", 500, player);
+        Canute.Quest = Protect_Canute;
+
+        // Quests.Add(Protect_Leif);
+        // Quests.Add(Beat_Thorkell);
+        // Quests.Add(Protect_Canute);
+    }
 
     public static void PopulateLocations(Player player)
     {

@@ -151,6 +151,12 @@ public static class Scenes
             "ASKELADD:  ...Alright. Come on then."
         };
         PlayScene(player, lines);
+        Item rustySword = new Item("Sword", "Rusty sword", 5, true, 50);
+        player.inventory.AddItem(player, rustySword);
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {rustySword.Name}");
+        Console.ResetColor();
+        Thread.Sleep(1500);
     }
 
     public static void PlayerLossNPC(Player player)
@@ -191,8 +197,7 @@ public static class Scenes
         string[] lines =
         {
             $"LEIF:      You really got stronger huh, {player.Name}",
-            "LEIF:      Sit down. There's something of your father's I've been carrying",
-            "longer than you've been alive.",
+            "LEIF:      Sit down. There's something of your father's I've been carrying, longer than you've been alive.",
             "[A small chest. Older than it looks. Inside: throwing knives, wrapped in oiled cloth.]",
             "LEIF:      He handed me these before you were born. Said he'd no use for them.",
             "LEIF:      Said that if he ever came asking for them back, I was to refuse him.",
@@ -200,10 +205,15 @@ public static class Scenes
             "LEIF:      Not once. Eleven years, not once.",
             "PLAYER:    Then he won't mind me taking them.",
             $"LEIF:      {player.Name}—",
-            "PLAYER:    He wasn't beaten, Leif. He was shot. There's a difference and",
-                    "everyone on that beach knows it."
+            "PLAYER:    He wasn't beaten, Leif. He was shot. There's a difference and everyone on that beach knows it."
         };
         PlayScene(player,lines);
+        Item thorfinnsBlades = new("Thorfinns Dual Daggers", "Dad's Legacy: short, fast and lethal", 25, true, 0);
+        player.inventory.AddItem(player, thorfinnsBlades);
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {thorfinnsBlades.Name}");
+        Console.ResetColor();
+        Thread.Sleep(1600);
     }
 
     public static void Story_your_mother_and_sister(Player player)
@@ -227,6 +237,14 @@ public static class Scenes
             "before it goes anywhere else."
         };
         PlayScene(player,lines);
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
+        Thread.Sleep(1800);
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Player tip: Equip your strongest weapon");
+        Console.ReadKey(true);
+        Console.ResetColor();
     }
 
     public static void Story_Thorkell(Player player)
@@ -239,11 +257,9 @@ public static class Scenes
             "THORKELL:  HA! Look at this one!",
             "THORKELL:  Half the size of my men and he's the only one who didn't step back.",
             "PLAYER:    I'm looking for Askeladd.",
-            "THORKELL:  Everyone's looking for Askeladd. Slippery little Welsh liar,",
-                    "never where he says he'll be.",
+            "THORKELL:  Everyone's looking for Askeladd. Slippery little Welsh liar, never where he says he'll be.",
             "THORKELL:  Tell you what, small one. You're going to die out there regardless.",
-            "THORKELL:  So give me a proper fight first. If you're upright afterwards,",
-                    "I'll tell you exactly where he's sailing.",
+            "THORKELL:  So give me a proper fight first. If you're upright afterwards, I'll tell you exactly where he's sailing.",
             "PLAYER:    And if I'm not upright?",
             "THORKELL:  Then you were never getting near him anyway and I've saved you the trip!",
             "THORKELL:  Either way I win! COME ON!"
@@ -305,7 +321,7 @@ public static class Scenes
         };
         PlayScene(player,lines);
     }
-    
+
 
     public static void Story_the_last_conversation(Player player)
     {
@@ -318,8 +334,7 @@ public static class Scenes
             "PLAYER:    Eleven years. I followed you for eleven years.",
             "ASKELADD:  I know. I let you.",
             "PLAYER:    ...Why?",
-            "ASKELADD:  Because your father asked me something on that beach",
-                    "and I never came up with an answer.",
+            "ASKELADD:  Because your father asked me something on that beach, and I never came up with an answer.",
             "ASKELADD:  He said a real warrior's got no need of a sword.",
             "ASKELADD:  I've carried that around longer than you've carried me.",
             "ASKELADD:  Go and find out what he meant.",
@@ -360,7 +375,7 @@ public static class Scenes
     public static void Story_the_end_lapies(Player player)
     {
         Console.Clear();
-        string [] lines = 
+        string [] lines =
         {
             "[LAPIS]",
 
@@ -370,8 +385,6 @@ public static class Scenes
             "on a flat calm morning, asking his son to come with him.",
 
             "This time you follow him for the right reason.",
-
-
             "             ~  THE END  ~"
         };
         PlayScene(player,lines);

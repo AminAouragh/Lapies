@@ -48,7 +48,6 @@ public static class Menu
                     }
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("Inventory opened");
                     player.inventory.Open();
                     Console.ResetColor();
                     break;
@@ -78,7 +77,7 @@ public static class Menu
                     }
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("Displaying quests");
+                    Quest.DisplayQuests();
                     Console.ResetColor();
                     Console.ReadKey(true);
                     break;
@@ -89,14 +88,10 @@ public static class Menu
                         Console.WriteLine("Can't access without starting a game");
                         Console.ResetColor();
                         Console.ReadKey(true);
-
                         break;
                     }
                     Console.Clear();
                     player.SeeStats();
-                    //Console.ForegroundColor = ConsoleColor.DarkRed;
-                    //Console.WriteLine("Displaying player stats");
-                    //Console.ResetColor();
                     break;
                 case 5:
                     IsPlaying = false;

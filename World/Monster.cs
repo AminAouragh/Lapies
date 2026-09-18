@@ -29,7 +29,7 @@ public class Monster
         }
         if(answer == "yes")
         {
-            player.inventory.AddItem(Reward);
+            player.inventory.AddItem(player, Reward);
             return;
         }
         else
