@@ -57,7 +57,6 @@ public class World
 
     public static void Start(Player player)
     {
-        Scenes.PlayIntro();
         PopulateLocations(player);
         PopulateNPC(player);
         PopulateQuests(player);
@@ -66,6 +65,7 @@ public class World
         player.currentLocation = currentLocation;
         if (!Home.BeenHere && !Home.SecondTime)
         {
+            Scenes.PlayIntro();
             Scenes.Intro(player);
             Home.BeenHere = true;
         }
