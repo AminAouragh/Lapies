@@ -1,5 +1,12 @@
+using System.Media;
+
 public static class Scenes
 {
+    //all context stories (audio)
+    public static SoundPlayer thorsIntro = new SoundPlayer("Utils/Audio/ThorsIntro.wav");
+    public static SoundPlayer oceanBattle = new SoundPlayer("Utils/Audio/OceanBattle.wav");
+    public static SoundPlayer oceanBattleMusic = new SoundPlayer("Utils/Audio/oceanBattleMusic.wav");
+    public static SoundPlayer arrowsAndmusic = new SoundPlayer("Utils/Audio/ArrowsAndMusic.wav");
 
     static readonly Dictionary<string, ConsoleColor> speakerColors = new()
     {
@@ -11,15 +18,12 @@ public static class Scenes
         { $"PLAYER", ConsoleColor.Cyan }
     };
 
-    public static string PrintLine(Player player, string line)
+    public static string PreparePrintLine(Player player, string line)
     {
-        string continueOn = "";
         if (line.StartsWith("["))
         {
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine(line);
-            Console.ResetColor();
-            return null;
+            return line;
         }
         int index = line.IndexOf(':');
         string speaker = index == -1 ? "" : line.Substring(0, index).Trim(); //pakt gwn de naam alleen als er ":" is, zo niet, skot line
@@ -33,21 +37,24 @@ public static class Scenes
             Console.ForegroundColor = color;
             Console.Write(speaker);
             Console.ResetColor();
-            Console.WriteLine(line.Substring(index));
+            return line.Substring(index);
         }
-        else
-        {
-            continueOn = line;
-            Console.WriteLine(line);
-        }
-        return continueOn;
+        return line;
     }
+
+    public static void PrintLine(Player player, string line)
+    {
+        string rest = PreparePrintLine(player, line);
+        Console.WriteLine(rest);
+        Console.ResetColor();
+    }
+
 
     public static void PlayScene(Player player, string[] lines)
     {
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine("After each line press [Enter] to show the next line");
-        Console.WriteLine("Or press [Spacebar] to skip to the end of this scene\n");
+        Console.WriteLine("Press [Enter] to show the next line");
+        Console.WriteLine("Press [Spacebar] to skip to the end of this scene\n");
         Console.ResetColor();
         foreach (string line in lines)
         {
@@ -73,6 +80,32 @@ public static class Scenes
             }
     }
 
+    public static void TypeLine(string text, int delay)
+    {
+        foreach (char c in text)
+        {
+            Console.Write(c);
+            Thread.Sleep(delay);
+        }
+        Console.ResetColor();
+        Console.WriteLine();
+}
+
+    public static void PlayIntro()
+    {
+        Console.Clear();
+        Console.WriteLine("A small introduction to the game, open your ears and listen");
+        thorsIntro.PlaySync();
+        World.BlockInput();
+    }
+
+    public static void PlayOceanBattleContext()
+    {
+        Console.Clear();
+        Console.WriteLine("A little context before entering the Ocean area, open your ears and listen");
+        oceanBattle.PlaySync();
+        World.BlockInput();
+    }
     public static void Intro(Player player)
     {
         Console.Clear();
@@ -89,6 +122,7 @@ public static class Scenes
     public static void OceanBattle(Player player)
     {
         Console.Clear();
+        oceanBattleMusic.Play();
         string[] lines =
         {
             "[Thirty men on the shingle. Ships behind them. They were waiting.]",
@@ -99,17 +133,58 @@ public static class Scenes
             "THORS (Father):     Then let's keep it cheap. One fight. You and me, no blades drawn on anyone else.",
             "THORS (Father):     When it's finished your ships leave, the village stands, and my son walks home.",
             "ASKELADD:  And when you lose?",
-            "THORS (Father):     Then you've still agreed to the terms.",
-            "[He wins. It takes almost no time at all.]",
-            "[Askeladd's sword is in the surf. Thors does not pick it up.]",
-            "ASKELADD:  Finish it. That's what the thing is for.",
-            "THORS (Father):     A sword is what's left when a man's run out of better ideas.",
-            "THORS (Father):     I ran out for a long time. I'm not going back to it.",
-            "[The archers do not need an order. Two arrows. Then a third.]",
-            "ASKELADD:  ...I didn't call for that."
+            "THORS (Father):     Then you've still agreed to the terms.\n",
+            "[BATTLING...]\n",
         };
-
         PlayScene(player, lines);
+        oceanBattleMusic.Stop();
+        ArrowsAndMusic(player);
+    }
+
+    public static void ArrowsAndMusic(Player player)
+    {
+        arrowsAndmusic.Play();
+        World.BlockInput();
+        string[] lines =
+        {
+            "[THE WINNER OF THIS DUAL...]",
+            "[is Thors the Troll]",
+            "[The archers do not need an order. One Arrow. Then two..]",
+            "THORS (Father): Aughh....",
+            "PLAYER: FATHERRR!!!",
+            "PLAYER: father no..",
+            // "[Askeladd's sword is in the surf. Thors does not pick it up.]",
+            // "ASKELADD:  Finish it. That's what the thing is for.",
+            "THORS (Father): Askeladd.. I bested u in our duel..",
+            "THORS (Father): Don't cross the promise of a warrior",
+            // "THORS (Father):     I ran out for a long time. I'm not going back to it.",
+            "ASKELADD:  ...I wouldn't dare",
+            "[Askeladd didn't call for the arrows..]",
+        };
+        foreach (string line in lines)
+        {
+            string lineLeft = PreparePrintLine(player, line);
+            if (line == "PLAYER: FATHERRR!!!" || line == "PLAYER: father no..")
+            {
+                TypeLine(lineLeft, 800);
+            }
+            else if (line == "THORS (Father): Aughh....")
+            {
+                TypeLine(lineLeft, 400);
+            }
+            else if (line == "[The archers do not need an order. One Arrow. Then two..]")
+            {
+                TypeLine(lineLeft, 130);
+            }
+            else if (line == "THORS (Father): Don't cross the promise of a warrior" || line == "ASKELADD:  ...I wouldn't dare")
+            {
+                TypeLine(lineLeft, 120);
+            }
+            else
+            {
+                TypeLine(lineLeft, 130);
+            }
+        }
     }
 
     public static void ThorsDeath(Player player)

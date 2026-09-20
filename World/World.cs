@@ -33,6 +33,7 @@ public class World
     public static Item reward_snake = new("Knife", "Knife to skin snakes", 5, false,0);
     public static Item reward_monster = new("Spider eyes", "A rare prize from a deadly creature of the forest",0,false,0);
     public static string instruction = "";
+
     // public const int LOCATION_ID_HOME = 1;
     // public const int LOCATION_ID_TOWN_SQUARE = 2;
     // public const int LOCATION_ID_GUARD_POST = 3;
@@ -56,6 +57,7 @@ public class World
 
     public static void Start(Player player)
     {
+        //Scenes.PlayIntro();
         PopulateLocations(player);
         PopulateNPC(player);
         PopulateQuests(player);
@@ -124,7 +126,9 @@ public class World
 
             if (current == Ocean && beenHere == false && second == false)
             {
+                //Scenes.PlayOceanBattleContext();
                 Scenes.OceanBattle(player);
+                Thread.Sleep(1000);
                 Console.Clear();
                 Scenes.ThorsDeath(player);
                 current.BeenHere = true;
@@ -233,6 +237,14 @@ public class World
         Thread.Sleep(350); // vorige project gebruikt voor user blocked, laat alleen text zien voor zoveel miliseconden
         Console.ResetColor();
         return currentLocation;
+    }
+
+    public static void BlockInput()
+    {
+        while (Console.KeyAvailable)
+        {
+            Console.ReadKey(true);
+        }
     }
 
 
