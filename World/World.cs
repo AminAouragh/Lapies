@@ -57,7 +57,7 @@ public class World
 
     public static void Start(Player player)
     {
-        //Scenes.PlayIntro();
+        Scenes.PlayIntro();
         PopulateLocations(player);
         PopulateNPC(player);
         PopulateQuests(player);
@@ -126,7 +126,7 @@ public class World
 
             if (current == Ocean && beenHere == false && second == false)
             {
-                //Scenes.PlayOceanBattleContext();
+                Scenes.PlayOceanBattleContext();
                 Scenes.OceanBattle(player);
                 Thread.Sleep(1000);
                 Console.Clear();
