@@ -27,7 +27,7 @@ public class Quest
 
     public void Protect_Leif(Player player)
     {
-        Console.WriteLine($"LEIF: AAGGHHH WOLVES {player.Name.ToUpper()}! WOLVESS..");
+        Console.WriteLine($"\nLEIF: AAGGHHH WOLVES {player.Name.ToUpper()}! WOLVESS..");
         Thread.Sleep(1800);
         Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.WriteLine("Leif is trapped by the wolves you need to protect him\nin order to continue *QUEST*");

@@ -65,7 +65,7 @@ public class World
         player.currentLocation = currentLocation;
         if (!Home.BeenHere && !Home.SecondTime)
         {
-            Scenes.PlayIntro();
+           // Scenes.PlayIntro();
             Scenes.Intro(player);
             Home.BeenHere = true;
         }
@@ -126,9 +126,11 @@ public class World
 
             if (current == Ocean && beenHere == false && second == false)
             {
-                Scenes.PlayOceanBattleContext();
+                //Scenes.PlayOceanBattleContext();
                 Scenes.OceanBattle(player);
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
+                Scenes.ArrowsAndMusic(player);
+                Thread.Sleep(2500);
                 Console.Clear();
                 Scenes.ThorsDeath(player);
                 current.BeenHere = true;

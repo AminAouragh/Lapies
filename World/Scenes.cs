@@ -59,11 +59,20 @@ public static class Scenes
         foreach (string line in lines)
         {
             PrintLine(player, line);
+            if (line == "[BATTLING...]\n")
+            {
+                break;
+            }
+
+            if (line == lines[lines.Count() - 1])
+            {
+                break;
+            }
 
             ConsoleKey key;
             do
             {
-                key = Console.ReadKey(true).Key;
+                    key = Console.ReadKey(true).Key;
 
             } while (key != ConsoleKey.Enter && key != ConsoleKey.Spacebar);
 
@@ -73,8 +82,11 @@ public static class Scenes
                 for (int i = index + 1; i < lines.Length; i++)
                 {
                     PrintLine(player, lines[i]);
+                    if (lines[i] == "[BATTLING...]\n")
+                    {
+                        break;
+                    }
                 }
-                Console.ReadKey(true);
                 break;
             }
             }
@@ -117,6 +129,7 @@ public static class Scenes
         };
 
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void OceanBattle(Player player)
@@ -137,12 +150,11 @@ public static class Scenes
             "[BATTLING...]\n",
         };
         PlayScene(player, lines);
-        oceanBattleMusic.Stop();
-        ArrowsAndMusic(player);
     }
 
     public static void ArrowsAndMusic(Player player)
     {
+        oceanBattleMusic.Stop();
         arrowsAndmusic.Play();
         World.BlockInput();
         string[] lines =
@@ -178,7 +190,7 @@ public static class Scenes
             }
             else if (line == "THORS (Father): Don't cross the promise of a warrior" || line == "ASKELADD:  ...I wouldn't dare")
             {
-                TypeLine(lineLeft, 120);
+                TypeLine(lineLeft, 100);
             }
             else
             {
@@ -210,6 +222,7 @@ public static class Scenes
         };
 
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void PlayerNPCBattle(Player player)
@@ -226,6 +239,7 @@ public static class Scenes
             "ASKELADD:  ...Alright. Come on then."
         };
         PlayScene(player, lines);
+        Console.ReadKey(true);
         Item rustySword = new Item("Sword", "Rusty sword", 5, true, 50);
         player.inventory.AddItem(player, rustySword);
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -246,6 +260,7 @@ public static class Scenes
         };
 
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void LeifIntro(Player player)
@@ -264,6 +279,7 @@ public static class Scenes
             "LEIF:      ...Stay close. The wolves have been bold this winter and I'm no fighter."
         };
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void After_quest1_story1(Player player)
@@ -283,7 +299,8 @@ public static class Scenes
             "PLAYER:    He wasn't beaten, Leif. He was shot. There's a difference and everyone on that beach knows it."
         };
         PlayScene(player,lines);
-        Item thorfinnsBlades = new("Thorfinns Dual Daggers", "Dad's Legacy: short, fast and lethal", 25, true, 0);
+        Console.ReadKey(true);
+        Item thorfinnsBlades = new($"{player.Name}'s Dual Daggers", "Dad's Legacy: short, fast and lethal", 25, true, 0);
         player.inventory.AddItem(player, thorfinnsBlades);
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {thorfinnsBlades.Name}");
@@ -312,6 +329,7 @@ public static class Scenes
             "before it goes anywhere else."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
         Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.WriteLine("*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
         Thread.Sleep(1800);
@@ -340,6 +358,7 @@ public static class Scenes
             "THORKELL:  Either way I win! COME ON!"
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_after_quest2(Player player)
@@ -357,6 +376,7 @@ public static class Scenes
             "THORKELL:  And boy — the king's a dead man. He just hasn't been told."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_the_throne(Player player)
@@ -371,6 +391,7 @@ public static class Scenes
             "and asking is all I have.",
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_after_quest3(Player player)
@@ -395,6 +416,7 @@ public static class Scenes
         "[Twenty blades. It takes far less time than you spent imagining it.]",
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
 
@@ -419,6 +441,7 @@ public static class Scenes
             "[They have never felt heavier.]"
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_after(Player player)
@@ -445,6 +468,7 @@ public static class Scenes
         "Reaching the end still holding the blade — that was the thing."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_the_end_lapies(Player player)
@@ -463,5 +487,6 @@ public static class Scenes
             "             ~  THE END  ~"
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 }

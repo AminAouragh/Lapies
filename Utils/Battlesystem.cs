@@ -21,16 +21,20 @@ public static class Battlesystem
 
             if (key == ConsoleKey.R)
             {
-                bool canRun = RandomGenerator.Next(18, 21) == canRunInt;
+                bool canRun = RandomGenerator.Next(15, 21) == canRunInt;
                 if (canRun)
                 {
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("You ran away.");
-                    Console.ReadKey(true);
+                    Console.ResetColor();
+                    Thread.Sleep(500);
                     return;
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("You couldn't escape.");
+                    Console.ResetColor();
                     Thread.Sleep(500);
                     continue;
                 }
@@ -53,23 +57,31 @@ public static class Battlesystem
 
             if (criticalHit)
             {
+                Console.ForegroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine($"Critical hit! You dealt {damage} damage!");
+                Console.ResetColor();
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"You dealt {damage} damage!");
+                Console.ResetColor();
             }
 
             if (monster.HP <= 0)
             {
                 player.EarnXP(100);
                 player.MonstersDefeated++;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("You won and earned 100 XP!");
-                Console.ReadKey(true);
+                Console.ResetColor();
+                Thread.Sleep(1000);
                 return;
             }
 
-            Console.WriteLine("The monster attacks!");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{monster.Name} attacks and did {monster.Damage}!\n");
+            Console.ResetColor();
 
             player.TakeDamage(monster.Damage);
         }
@@ -93,9 +105,14 @@ public static class Battlesystem
         {
             Console.WriteLine($"{player.Name} HP: {player.HP}");
             Console.WriteLine($"{npc.Name} HP: {npc.HP}");
-
             Console.WriteLine("\nPress [A] to attack");
             key = Console.ReadKey(true).Key;
+
+            if (key != ConsoleKey.A)
+            {
+                continue;
+            }
+
             int damageNPC = 0;
             int damagePlayer = player.weapon.DealDamage(player.weapon.Damage);
             bool criticalHit = RandomGenerator.Next(100) < CriticalHitChance;
@@ -103,9 +120,15 @@ public static class Battlesystem
 
             if (key == ConsoleKey.A)
             {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nYou dealt {damagePlayer} damage!");
+                Console.ResetColor();
                 if (criticalHit)
                 {
                     damagePlayer *= 2;
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine($"Critical hit! You dealt {damagePlayer} damage!");
+                    Console.ResetColor();
                 }
                 npc.TakeDamage(damagePlayer);
             }
@@ -115,6 +138,9 @@ public static class Battlesystem
                 if (npc.Name == "Askeladd")
                 {
                     damageNPC += npc.DealDamage(10, 50);
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage\n");
+                    Console.ResetColor();
                     player.TakeDamage(damageNPC);
                 }
                 else if (npc.Name == "Thorkell")
@@ -124,26 +150,35 @@ public static class Battlesystem
                     damageNPC += npc.DealDamage(15, 20);
                     if (blockKey == ConsoleKey.D && blocked)
                     {
-                        Console.WriteLine("You blocked the attack!");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("\nYou blocked the attack!\n");
+                        Console.ResetColor();
                     }
                     else
                     {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage\n");
+                        Console.ResetColor();
                         player.TakeDamage(damageNPC);
                     }
                 }
                 else
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage\n");
+                    Console.ResetColor();
                     player.TakeDamage(damageNPC);
                 }
             }
 
-
-        }while (player.IsAlive() && npc.HP > 0);
+        } while (player.IsAlive() && npc.HP > 0);
 
 
         string won = player.IsAlive()? $"\n{player.Name} WON!" : $"\n{npc.Name} WON!";
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(won);
-        Thread.Sleep(1000);
+        Console.ResetColor();
+        Thread.Sleep(3000);
         return;
     }
 }
