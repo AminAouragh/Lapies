@@ -1,6 +1,7 @@
 public class World
 {
     public static Player Player;
+    public static bool isInitialized = false;
     public static readonly List<Weapon> Weapons = new List<Weapon>();
     public static readonly List<Monster> Monsters = new List<Monster>();
     public static readonly List<Quest> Quests = new List<Quest>();
@@ -49,23 +50,24 @@ public class World
     public World(Player player)
     {
         Player = player;
-        // PopulateMonsters();
-        // PopulateQuests();
-        // PopulateLocations();
 
     }
 
     public static void Start(Player player)
     {
-        PopulateLocations(player);
-        PopulateNPC(player);
-        PopulateQuests(player);
+        if (!isInitialized)
+        {
+            PopulateLocations(player);
+            PopulateNPC(player);
+            PopulateQuests(player);
+            isInitialized = true;
+        }
 
         Location currentLocation = player.currentLocation ?? Home; //die "??" staat voor als player al bij home was (dus niet null), dan laatste locatie spawn
         player.currentLocation = currentLocation;
         if (!Home.BeenHere && !Home.SecondTime)
         {
-           // Scenes.PlayIntro();
+            Scenes.PlayIntro();
             Scenes.Intro(player);
             Home.BeenHere = true;
         }
@@ -126,7 +128,7 @@ public class World
 
             if (current == Ocean && beenHere == false && second == false)
             {
-                //Scenes.PlayOceanBattleContext();
+                Scenes.PlayOceanBattleContext();
                 Scenes.OceanBattle(player);
                 Thread.Sleep(5000);
                 Scenes.ArrowsAndMusic(player);
@@ -171,7 +173,7 @@ public class World
             else if(current == Town && !current.BeenHere && second == false)
             {
                 current.Quest.Protect_Leif(player);
-                Quests.Add(current.Quest);
+                player.Quests.Add(current.Quest);
                 if (!current.Quest.IsDone)
                 {
                     current = Forest;
@@ -194,8 +196,11 @@ public class World
                 Scenes.Story_Thorkell(player);
                 sceneTriggered = true;
                 current.Quest.Beat_Thorkell(player, current.NPC);
-                Quests.Add(current.Quest);
-                if (!current.Quest.IsDone)
+                if (!player.Quests.Contains(current.Quest))
+                {
+                    player.Quests.Add(current.Quest);
+                }
+                if (!Iceland.Quest.IsDone)
                 {
                     current = Home;
                 }
@@ -204,6 +209,7 @@ public class World
                     Scenes.Story_after_quest2(player);
                     current.BeenHere = true;
                     sceneTriggered = true;
+                    player.Quests.Remove(Iceland.Quest);
                 }
             }
         }

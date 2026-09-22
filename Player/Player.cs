@@ -10,6 +10,7 @@ public class Player
     public int QuestsDone;
     public int EnemiesDefeated;
     public int MonstersDefeated;
+    public List<Quest> Quests = [];
 
     public Player(string name)
     {

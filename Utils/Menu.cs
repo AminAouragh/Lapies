@@ -77,7 +77,7 @@ public static class Menu
                     }
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Quest.DisplayQuests();
+                    Quest.DisplayQuests(player);
                     Console.ResetColor();
                     Console.ReadKey(true);
                     break;

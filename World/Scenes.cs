@@ -101,22 +101,39 @@ public static class Scenes
         }
         Console.ResetColor();
         Console.WriteLine();
-}
+    }
+
+    public static void SkipAudio(SoundPlayer audio)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("Press [ENTER] to skip context");
+        Console.ResetColor();
+        audio.Play();
+        ConsoleKey key;
+        do
+        {
+            key = Console.ReadKey(true).Key;
+
+        } while (key != ConsoleKey.Enter);
+        if (key == ConsoleKey.Enter)
+        {
+            audio.Stop();
+            return;
+        }
+    }
 
     public static void PlayIntro()
     {
         Console.Clear();
-        Console.WriteLine("A small introduction to the game, open your ears and listen");
-        thorsIntro.PlaySync();
-        World.BlockInput();
+        Console.WriteLine("A small introduction to the game, open your ears and listen\n");
+        SkipAudio(thorsIntro);
     }
 
     public static void PlayOceanBattleContext()
     {
         Console.Clear();
-        Console.WriteLine("A little context before entering the Ocean area, open your ears and listen");
-        oceanBattle.PlaySync();
-        World.BlockInput();
+        Console.WriteLine("A little context before entering the Ocean area, open your ears and listen\n");
+        SkipAudio(oceanBattle);
     }
     public static void Intro(Player player)
     {

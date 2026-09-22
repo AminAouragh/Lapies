@@ -14,9 +14,9 @@ public class Quest
         player = player1;
     }
 
-    public static void DisplayQuests()
+    public static void DisplayQuests(Player player)
     {
-        foreach (Quest quest in World.Quests)
+        foreach (Quest quest in player.Quests)
         {
             if (!quest.IsDone)
             {

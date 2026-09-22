@@ -80,7 +80,7 @@ public static class Battlesystem
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{monster.Name} attacks and did {monster.Damage}!\n");
+            Console.WriteLine($"{monster.Name} attacks and did {monster.Damage} damage!\n");
             Console.ResetColor();
 
             player.TakeDamage(monster.Damage);
@@ -105,7 +105,7 @@ public static class Battlesystem
         {
             Console.WriteLine($"{player.Name} HP: {player.HP}");
             Console.WriteLine($"{npc.Name} HP: {npc.HP}");
-            Console.WriteLine("\nPress [A] to attack");
+            Console.WriteLine("Press [A] to attack");
             key = Console.ReadKey(true).Key;
 
             if (key != ConsoleKey.A)
@@ -116,7 +116,7 @@ public static class Battlesystem
             int damageNPC = 0;
             int damagePlayer = player.weapon.DealDamage(player.weapon.Damage);
             bool criticalHit = RandomGenerator.Next(100) < CriticalHitChance;
-            bool blocked = RandomGenerator.Next(15, 25) == CriticalHitChance; // 1 op 10 vgm
+            bool blocked = RandomGenerator.Next(15, 20) == CriticalHitChance; // 1 op 10 vgm
 
             if (key == ConsoleKey.A)
             {
@@ -139,7 +139,7 @@ public static class Battlesystem
                 {
                     damageNPC += npc.DealDamage(10, 50);
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage\n");
+                    Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage!\n");
                     Console.ResetColor();
                     player.TakeDamage(damageNPC);
                 }
@@ -157,7 +157,7 @@ public static class Battlesystem
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage\n");
+                        Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage!\n");
                         Console.ResetColor();
                         player.TakeDamage(damageNPC);
                     }
@@ -165,7 +165,7 @@ public static class Battlesystem
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage\n");
+                    Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage!\n");
                     Console.ResetColor();
                     player.TakeDamage(damageNPC);
                 }
