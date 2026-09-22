@@ -1,15 +1,23 @@
 public class Inventory
 {
-    public  Player Player;
-    public Item Item;
-
+    public Player Player;
     private List<Item> items = new List<Item>();
-    private Item? equippedWeapon = null;
+    private Item? equippedItem = null;
+    private Weapon? equippedWeapon = null;
 
-    public void AddItem(Item newItem)
+    public Inventory(Player player)
+    {
+        Player = player;
+    }
+
+    public void AddItem(Player player, Item newItem)
     {
         items.Add(newItem);
-        //Console.WriteLine($"You received: {newItem.Name}");
+        if (equippedWeapon == null && newItem.IsWeapon)
+        {
+            equippedWeapon = new Weapon(newItem);
+            player.weapon = equippedWeapon;
+        }
     }
 
     public bool PlayerHasItemInInventory(string item)
@@ -20,6 +28,7 @@ public class Inventory
     public void ShowInventory()
     {
         Console.WriteLine("\n========== INVENTORY ==========");
+        string equipStatus = "";
         if (items.Count == 0)
         {
             Console.WriteLine("( Empty )");
@@ -28,14 +37,21 @@ public class Inventory
         {
             for (int i = 0; i < items.Count; i++)
             {
-                string equipStatus = (items[i] == equippedWeapon) ? "[EQUIPPED]" : "";
+                if (items[i].IsWeapon)
+                {
+                    equipStatus = (equippedWeapon != null && items[i] == equippedWeapon.Item) ? "[EQUIPPED]" : "";
+                }
+                else
+                {
+                    equipStatus = (items[i] == equippedItem) ? "[EQUIPPED]" : "";
+                }
                 Console.WriteLine($"{i + 1}. {items[i].Name} {equipStatus}");
             }
         }
         Console.WriteLine("===============================");
     }
 
-    public Item? GetEquippedWeapon()
+    public Weapon? GetEquippedWeapon()
     {
         return equippedWeapon;
     }
@@ -96,8 +112,9 @@ public class Inventory
         {
             if (items[actualIndex].IsWeapon)
             {
-                equippedWeapon = items[actualIndex];
+                equippedWeapon = new Weapon(items[actualIndex]);
                 Console.WriteLine($"\nYou have equipped: {equippedWeapon.Name}");
+                Player.weapon = equippedWeapon;
             }
             else
             {

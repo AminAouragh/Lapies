@@ -1,5 +1,12 @@
+using System.Media;
+
 public static class Scenes
 {
+    //all context stories (audio)
+    public static SoundPlayer thorsIntro = new SoundPlayer("Utils/Audio/ThorsIntro.wav");
+    public static SoundPlayer oceanBattle = new SoundPlayer("Utils/Audio/OceanBattle.wav");
+    public static SoundPlayer oceanBattleMusic = new SoundPlayer("Utils/Audio/oceanBattleMusic.wav");
+    public static SoundPlayer arrowsAndmusic = new SoundPlayer("Utils/Audio/ArrowsAndMusic.wav");
 
     static readonly Dictionary<string, ConsoleColor> speakerColors = new()
     {
@@ -11,15 +18,12 @@ public static class Scenes
         { $"PLAYER", ConsoleColor.Cyan }
     };
 
-    public static string PrintLine(Player player, string line)
+    public static string PreparePrintLine(Player player, string line)
     {
-        string continueOn = "";
         if (line.StartsWith("["))
         {
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine(line);
-            Console.ResetColor();
-            return null;
+            return line;
         }
         int index = line.IndexOf(':');
         string speaker = index == -1 ? "" : line.Substring(0, index).Trim(); //pakt gwn de naam alleen als er ":" is, zo niet, skot line
@@ -33,30 +37,42 @@ public static class Scenes
             Console.ForegroundColor = color;
             Console.Write(speaker);
             Console.ResetColor();
-            Console.WriteLine(line.Substring(index));
+            return line.Substring(index);
         }
-        else
-        {
-            continueOn = line;
-            Console.WriteLine(line);
-        }
-        return continueOn;
+        return line;
     }
+
+    public static void PrintLine(Player player, string line)
+    {
+        string rest = PreparePrintLine(player, line);
+        Console.WriteLine(rest);
+        Console.ResetColor();
+    }
+
 
     public static void PlayScene(Player player, string[] lines)
     {
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine("After each line press [Enter] to show the next line");
-        Console.WriteLine("Or press [Spacebar] to skip to the end of this scene\n");
+        Console.WriteLine("Press [Enter] to show the next line");
+        Console.WriteLine("Press [Spacebar] to skip to the end of this scene\n");
         Console.ResetColor();
         foreach (string line in lines)
         {
             PrintLine(player, line);
+            if (line == "[BATTLING...]\n")
+            {
+                break;
+            }
+
+            if (line == lines[lines.Count() - 1])
+            {
+                break;
+            }
 
             ConsoleKey key;
             do
             {
-                key = Console.ReadKey(true).Key;
+                    key = Console.ReadKey(true).Key;
 
             } while (key != ConsoleKey.Enter && key != ConsoleKey.Spacebar);
 
@@ -66,13 +82,59 @@ public static class Scenes
                 for (int i = index + 1; i < lines.Length; i++)
                 {
                     PrintLine(player, lines[i]);
+                    if (lines[i] == "[BATTLING...]\n")
+                    {
+                        break;
+                    }
                 }
-                Console.ReadKey(true);
                 break;
             }
             }
     }
 
+    public static void TypeLine(string text, int delay)
+    {
+        foreach (char c in text)
+        {
+            Console.Write(c);
+            Thread.Sleep(delay);
+        }
+        Console.ResetColor();
+        Console.WriteLine();
+    }
+
+    public static void SkipAudio(SoundPlayer audio)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("Press [ENTER] to skip context");
+        Console.ResetColor();
+        audio.Play();
+        ConsoleKey key;
+        do
+        {
+            key = Console.ReadKey(true).Key;
+
+        } while (key != ConsoleKey.Enter);
+        if (key == ConsoleKey.Enter)
+        {
+            audio.Stop();
+            return;
+        }
+    }
+
+    public static void PlayIntro()
+    {
+        Console.Clear();
+        Console.WriteLine("A small introduction to the game, open your ears and listen\n");
+        SkipAudio(thorsIntro);
+    }
+
+    public static void PlayOceanBattleContext()
+    {
+        Console.Clear();
+        Console.WriteLine("A little context before entering the Ocean area, open your ears and listen\n");
+        SkipAudio(oceanBattle);
+    }
     public static void Intro(Player player)
     {
         Console.Clear();
@@ -84,11 +146,13 @@ public static class Scenes
         };
 
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void OceanBattle(Player player)
     {
         Console.Clear();
+        oceanBattleMusic.Play();
         string[] lines =
         {
             "[Thirty men on the shingle. Ships behind them. They were waiting.]",
@@ -99,17 +163,57 @@ public static class Scenes
             "THORS (Father):     Then let's keep it cheap. One fight. You and me, no blades drawn on anyone else.",
             "THORS (Father):     When it's finished your ships leave, the village stands, and my son walks home.",
             "ASKELADD:  And when you lose?",
-            "THORS (Father):     Then you've still agreed to the terms.",
-            "[He wins. It takes almost no time at all.]",
-            "[Askeladd's sword is in the surf. Thors does not pick it up.]",
-            "ASKELADD:  Finish it. That's what the thing is for.",
-            "THORS (Father):     A sword is what's left when a man's run out of better ideas.",
-            "THORS (Father):     I ran out for a long time. I'm not going back to it.",
-            "[The archers do not need an order. Two arrows. Then a third.]",
-            "ASKELADD:  ...I didn't call for that."
+            "THORS (Father):     Then you've still agreed to the terms.\n",
+            "[BATTLING...]\n",
         };
-
         PlayScene(player, lines);
+    }
+
+    public static void ArrowsAndMusic(Player player)
+    {
+        oceanBattleMusic.Stop();
+        arrowsAndmusic.Play();
+        World.BlockInput();
+        string[] lines =
+        {
+            "[THE WINNER OF THIS DUAL...]",
+            "[is Thors the Troll]",
+            "[The archers do not need an order. One Arrow. Then two..]",
+            "THORS (Father): Aughh....",
+            "PLAYER: FATHERRR!!!",
+            "PLAYER: father no..",
+            // "[Askeladd's sword is in the surf. Thors does not pick it up.]",
+            // "ASKELADD:  Finish it. That's what the thing is for.",
+            "THORS (Father): Askeladd.. I bested u in our duel..",
+            "THORS (Father): Don't cross the promise of a warrior",
+            // "THORS (Father):     I ran out for a long time. I'm not going back to it.",
+            "ASKELADD:  ...I wouldn't dare",
+            "[Askeladd didn't call for the arrows..]",
+        };
+        foreach (string line in lines)
+        {
+            string lineLeft = PreparePrintLine(player, line);
+            if (line == "PLAYER: FATHERRR!!!" || line == "PLAYER: father no..")
+            {
+                TypeLine(lineLeft, 800);
+            }
+            else if (line == "THORS (Father): Aughh....")
+            {
+                TypeLine(lineLeft, 400);
+            }
+            else if (line == "[The archers do not need an order. One Arrow. Then two..]")
+            {
+                TypeLine(lineLeft, 130);
+            }
+            else if (line == "THORS (Father): Don't cross the promise of a warrior" || line == "ASKELADD:  ...I wouldn't dare")
+            {
+                TypeLine(lineLeft, 100);
+            }
+            else
+            {
+                TypeLine(lineLeft, 130);
+            }
+        }
     }
 
     public static void ThorsDeath(Player player)
@@ -135,6 +239,7 @@ public static class Scenes
         };
 
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void PlayerNPCBattle(Player player)
@@ -151,6 +256,13 @@ public static class Scenes
             "ASKELADD:  ...Alright. Come on then."
         };
         PlayScene(player, lines);
+        Console.ReadKey(true);
+        Item rustySword = new Item("Sword", "Rusty sword", 5, true, 50);
+        player.inventory.AddItem(player, rustySword);
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {rustySword.Name}");
+        Console.ResetColor();
+        Thread.Sleep(1500);
     }
 
     public static void PlayerLossNPC(Player player)
@@ -165,6 +277,7 @@ public static class Scenes
         };
 
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void LeifIntro(Player player)
@@ -183,16 +296,16 @@ public static class Scenes
             "LEIF:      ...Stay close. The wolves have been bold this winter and I'm no fighter."
         };
         PlayScene(player, lines);
+        Console.ReadKey(true);
     }
 
     public static void After_quest1_story1(Player player)
     {
         Console.Clear();
-        string[] lines = 
+        string[] lines =
         {
             $"LEIF:      You really got stronger huh, {player.Name}",
-            "LEIF:      Sit down. There's something of your father's I've been carrying",
-            "longer than you've been alive.",
+            "LEIF:      Sit down. There's something of your father's I've been carrying, longer than you've been alive.",
             "[A small chest. Older than it looks. Inside: throwing knives, wrapped in oiled cloth.]",
             "LEIF:      He handed me these before you were born. Said he'd no use for them.",
             "LEIF:      Said that if he ever came asking for them back, I was to refuse him.",
@@ -200,19 +313,27 @@ public static class Scenes
             "LEIF:      Not once. Eleven years, not once.",
             "PLAYER:    Then he won't mind me taking them.",
             $"LEIF:      {player.Name}—",
-            "PLAYER:    He wasn't beaten, Leif. He was shot. There's a difference and",
-                    "everyone on that beach knows it."
+            "PLAYER:    He wasn't beaten, Leif. He was shot. There's a difference and everyone on that beach knows it."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
+        Item thorfinnsBlades = new($"{player.Name}'s Dual Daggers", "Dad's Legacy: short, fast and lethal", 25, true, 0);
+        player.inventory.AddItem(player, thorfinnsBlades);
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {thorfinnsBlades.Name}");
+        Console.ResetColor();
+        Thread.Sleep(1600);
     }
 
     public static void Story_your_mother_and_sister(Player player)
     {
         Console.Clear();
-        string [] lines = 
+        string [] lines =
         {
             "[Your mother doesn't shout. Somehow that's worse.]",
             "[Your sister just holds onto your sleeve and won't let go of it.]",
+            "[Mother has fed you and you recovered and are ready to go..]",
+            "[But they aren't..]",
 
             "PLAYER:    I'm going after him.",
             "PLAYER:    He didn't beat father. He had archers in the treeline the whole time.",
@@ -225,34 +346,42 @@ public static class Scenes
             "before it goes anywhere else."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
+        Thread.Sleep(1800);
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("Player tip: Equip your strongest weapon");
+        Console.ReadKey(true);
+        Console.ResetColor();
     }
 
     public static void Story_Thorkell(Player player)
     {
     Console.Clear();
-    string [] lines = 
+    string [] lines =
         {
             "[The biggest man you have ever seen is laughing at something that isn't funny.]",
 
             "THORKELL:  HA! Look at this one!",
             "THORKELL:  Half the size of my men and he's the only one who didn't step back.",
             "PLAYER:    I'm looking for Askeladd.",
-            "THORKELL:  Everyone's looking for Askeladd. Slippery little Welsh liar,",
-                    "never where he says he'll be.",
+            "THORKELL:  Everyone's looking for Askeladd. Slippery little Welsh liar, never where he says he'll be.",
             "THORKELL:  Tell you what, small one. You're going to die out there regardless.",
-            "THORKELL:  So give me a proper fight first. If you're upright afterwards,",
-                    "I'll tell you exactly where he's sailing.",
+            "THORKELL:  So give me a proper fight first. If you're upright afterwards, I'll tell you exactly where he's sailing.",
             "PLAYER:    And if I'm not upright?",
             "THORKELL:  Then you were never getting near him anyway and I've saved you the trip!",
             "THORKELL:  Either way I win! COME ON!"
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_after_quest2(Player player)
     {
         Console.Clear();
-        string [] lines = 
+        string [] lines =
         {
             "THORKELL:  ...HAHAHA! GOOD! That was GOOD!",
             "THORKELL:  You've got your father's footwork. Did you know that?",
@@ -264,6 +393,7 @@ public static class Scenes
             "THORKELL:  And boy — the king's a dead man. He just hasn't been told."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_the_throne(Player player)
@@ -278,6 +408,7 @@ public static class Scenes
             "and asking is all I have.",
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_after_quest3(Player player)
@@ -302,8 +433,9 @@ public static class Scenes
         "[Twenty blades. It takes far less time than you spent imagining it.]",
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
-    
+
 
     public static void Story_the_last_conversation(Player player)
     {
@@ -316,8 +448,7 @@ public static class Scenes
             "PLAYER:    Eleven years. I followed you for eleven years.",
             "ASKELADD:  I know. I let you.",
             "PLAYER:    ...Why?",
-            "ASKELADD:  Because your father asked me something on that beach",
-                    "and I never came up with an answer.",
+            "ASKELADD:  Because your father asked me something on that beach, and I never came up with an answer.",
             "ASKELADD:  He said a real warrior's got no need of a sword.",
             "ASKELADD:  I've carried that around longer than you've carried me.",
             "ASKELADD:  Go and find out what he meant.",
@@ -327,6 +458,7 @@ public static class Scenes
             "[They have never felt heavier.]"
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_after(Player player)
@@ -353,12 +485,13 @@ public static class Scenes
         "Reaching the end still holding the blade — that was the thing."
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 
     public static void Story_the_end_lapies(Player player)
     {
         Console.Clear();
-        string [] lines = 
+        string [] lines =
         {
             "[LAPIS]",
 
@@ -368,10 +501,9 @@ public static class Scenes
             "on a flat calm morning, asking his son to come with him.",
 
             "This time you follow him for the right reason.",
-
-
             "             ~  THE END  ~"
         };
         PlayScene(player,lines);
+        Console.ReadKey(true);
     }
 }
