@@ -405,7 +405,7 @@ public class World
         Quest Protect_Leif = new Quest("Protect Leif", "Protect Leif from the wolves", 100, player);
         Town.Quest = Protect_Leif;
 
-        Quest Beat_Thorkell = new Quest("Beat Thorkell..", "Beat Thorkell at Iceland", 100, player);
+        Quest Beat_Thorkell = new Quest("Beat Thorkell", "Beat Thorkell at Iceland", 100, player);
         Iceland.Quest = Beat_Thorkell;
 
         Quest Protect_Canute = new Quest("Protect Canute", "Protect Canute from Askeladd", 500, player);
