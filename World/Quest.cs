@@ -63,7 +63,7 @@ public class Quest
         Console.WriteLine($"\nLEIF: AAGGHHH WOLVES {player.Name.ToUpper()}! WOLVESS..");
         Thread.Sleep(1800);
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine("*Leif is trapped by the wolves you need to protect him\nin order to continue [QUEST]*");
+        Console.WriteLine("\n* Leif is trapped by the wolves you need to protect him in order to continue [QUEST] *");
         Console.ReadKey(true);
         Console.ResetColor();
         List<Monster> wolves = World.Spawn_Wolves();
@@ -75,7 +75,7 @@ public class Quest
                 player.HP = 36;
                 return;
             }
-            if (wolf.HP > 0)
+            else if (wolf.HP > 0)
             {
                 monstersEscaped.Add(wolf);
             }

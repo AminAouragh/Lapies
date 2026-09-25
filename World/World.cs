@@ -183,7 +183,10 @@ public class World
             else if(current == Town && !current.BeenHere && second == false)
             {
                 current.Quest.Protect_Leif(player);
-                player.Quests.Add(current.Quest);
+                if (!player.Quests.Contains(current.Quest))
+                {
+                    player.Quests.Add(current.Quest);
+                }
                 if (!current.Quest.IsDone)
                 {
                     current = Forest;
@@ -243,6 +246,7 @@ public class World
             {
                 player.Age = 19;
                 current.BeenHere = true;
+                player.currentLocation = Vinland;
                 sceneTriggered = true;
                 Scenes.Story_after(player);
                 Thread.Sleep(5000);
