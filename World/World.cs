@@ -2,6 +2,9 @@ public class World
 {
     public static Player Player;
     public static bool isInitialized = false;
+    public static bool thorkellQuest = false;
+    public static bool askeladdQuest = false;
+    public static bool Endgame = false;
     public static readonly List<Weapon> Weapons = new List<Weapon>();
     public static readonly List<Monster> Monsters = new List<Monster>();
     public static readonly List<Quest> Quests = new List<Quest>();
@@ -79,7 +82,13 @@ public class World
             string location = currentLocation == Home ? "You are Home" : $"You are in the {currentLocation.Name} area";
             bool followThors = currentLocation == Home && !Ocean.BeenHere;
             bool followLeif = currentLocation == Home && Home.SecondTime && !Iceland.BeenHere;
-            instruction = followThors ? "Follow Thors to the Ocean" : followLeif ? "Follow leif to Iceland" : "";
+            bool thorkell = currentLocation != Canute  && !Canute.BeenHere && thorkellQuest;
+            bool lapis = currentLocation != Vinland && !Vinland.BeenHere && askeladdQuest;
+            instruction =
+            followThors ? "Follow Thors to the Ocean" :
+            followLeif ? "Follow leif to Iceland" :
+            thorkell ? "Find the king" :
+            lapis ? "Far to the west, Far across the ocean, Lies a place" : "";
             Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.Write($"Location: {location}");
             Console.ResetColor();
@@ -149,8 +158,8 @@ public class World
             else if (current == Grassland && beenHere == false && second == false)
             {
                 Scenes.PlayerNPCBattle(player);
+                player.Age = 8;
                 Battlesystem.StartBattleNPC(player, Grassland.NPC);
-                // PopulateWeapons(player);
                 Console.Clear();
                 Scenes.PlayerLossNPC(player);
                 current.BeenHere = true;
@@ -166,6 +175,7 @@ public class World
             }
             else if (current == Forest && !current.BeenHere && second == false)
             {
+                player.Age = 12;
                 Scenes.LeifIntro(player);
                 sceneTriggered = true;
                 current.BeenHere = true;
@@ -173,7 +183,10 @@ public class World
             else if(current == Town && !current.BeenHere && second == false)
             {
                 current.Quest.Protect_Leif(player);
-                player.Quests.Add(current.Quest);
+                if (!player.Quests.Contains(current.Quest))
+                {
+                    player.Quests.Add(current.Quest);
+                }
                 if (!current.Quest.IsDone)
                 {
                     current = Forest;
@@ -186,6 +199,7 @@ public class World
             }
             else if(current == Home && current.BeenHere && !current.SecondTime && second == false)
             {
+                player.Age = 14;
                 Scenes.Story_your_mother_and_sister(player);
                 player.HP = 100;
                 sceneTriggered = true;
@@ -193,13 +207,13 @@ public class World
             }
             else if(current == Iceland && !current.BeenHere && second == false)
             {
-                Scenes.Story_Thorkell(player);
-                sceneTriggered = true;
-                current.Quest.Beat_Thorkell(player, current.NPC);
                 if (!player.Quests.Contains(current.Quest))
                 {
                     player.Quests.Add(current.Quest);
                 }
+                Scenes.Story_Thorkell(player);
+                sceneTriggered = true;
+                current.Quest.Beat_Thorkell(player, current.NPC);
                 if (!Iceland.Quest.IsDone)
                 {
                     current = Home;
@@ -209,11 +223,36 @@ public class World
                     Scenes.Story_after_quest2(player);
                     current.BeenHere = true;
                     sceneTriggered = true;
-                    player.Quests.Remove(Iceland.Quest);
+                    thorkellQuest = true;
                 }
             }
+            else if (current == Canute && !current.BeenHere)
+            {
+                player.Age = 16;
+                Scenes.Story_the_throne(player);
+                Scenes.Story_after_quest3(player);
+                player.Quests.Add(current.Quest);
+                bool succeededEnding = current.Quest.ProtectCanute(player);
+                if (succeededEnding)
+                {
+                    Endgame = true;
+                }
+                Scenes.Story_the_last_conversation(player);
+                askeladdQuest = true;
+                current.BeenHere = true;
+                sceneTriggered = true;
+            }
+            else if (current == Vinland && !current.BeenHere)
+            {
+                player.Age = 19;
+                current.BeenHere = true;
+                player.currentLocation = Vinland;
+                sceneTriggered = true;
+                Scenes.Story_after(player);
+                Thread.Sleep(5000);
+                Scenes.Story_the_end_lapies(player);
+            }
         }
-
         return current;
     }
 
@@ -234,6 +273,14 @@ public class World
             ConsoleKey.A => currentLocation.West,
             _ => null
         };
+        if (!Endgame && nextLocation == Vinland )
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("You haven't reached Lapis yet!");
+            Console.ResetColor();
+            Thread.Sleep(500);
+            return currentLocation;
+        }
         if (nextLocation != null)
         {
             Console.WriteLine($"You are now going to the {nextLocation.Name} area.");
@@ -322,8 +369,8 @@ public class World
     {
         List<Monster> wolves = new()
         {
-            new Monster("Alpha Wolf", 25, 5, null),
-            new Monster("Sigma Wolf", 15, 2, null),
+            new Monster("Alpha Wolf", 30, 6, null),
+            new Monster("Sigma Wolf", 15, 3, null),
             new Monster("Wolf 1", 10, 2, null),
             new Monster("Wolf 2", 10, 2, null),
             new Monster("Wolf 3", 10, 2, null),
@@ -362,15 +409,11 @@ public class World
         Quest Protect_Leif = new Quest("Protect Leif", "Protect Leif from the wolves", 100, player);
         Town.Quest = Protect_Leif;
 
-        Quest Beat_Thorkell = new Quest("Beat Thorkell..", "Beat Thorkell at Iceland", 100, player);
+        Quest Beat_Thorkell = new Quest("Beat Thorkell", "Beat Thorkell at Iceland", 100, player);
         Iceland.Quest = Beat_Thorkell;
 
         Quest Protect_Canute = new Quest("Protect Canute", "Protect Canute from Askeladd", 500, player);
         Canute.Quest = Protect_Canute;
-
-        // Quests.Add(Protect_Leif);
-        // Quests.Add(Beat_Thorkell);
-        // Quests.Add(Protect_Canute);
     }
 
     public static void PopulateLocations(Player player)

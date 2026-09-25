@@ -7,6 +7,8 @@ public static class Scenes
     public static SoundPlayer oceanBattle = new SoundPlayer("Utils/Audio/OceanBattle.wav");
     public static SoundPlayer oceanBattleMusic = new SoundPlayer("Utils/Audio/oceanBattleMusic.wav");
     public static SoundPlayer arrowsAndmusic = new SoundPlayer("Utils/Audio/ArrowsAndMusic.wav");
+    public static SoundPlayer EndingAudio = new SoundPlayer("Utils/Audio/Lapis.wav");
+    public static SoundPlayer NoEnemies = new SoundPlayer("Utils/Audio/NoEnemies.wav");
 
     static readonly Dictionary<string, ConsoleColor> speakerColors = new()
     {
@@ -404,8 +406,9 @@ public static class Scenes
             "CANUTE:    You're not one of my father's men.",
             "PLAYER:    No.",
             "CANUTE:    Good. My father's men are the ones I'm frightened of.",
-            "CANUTE:    Stay near me tonight. Please. There's no one else I can ask,",
-            "and asking is all I have.",
+            "CANUTE:    Stay near me tonight. Please. There's no one else I can ask, and asking is all I have.",
+            "[You take your place near the throne. The feast goes on around you — laughter, spilled ale, men too drunk on victory to notice how tightly the prince grips the arm of his chair.]",
+            "[Hours pass. Nobody comes. You start to think tonight might be like every other night.]",
         };
         PlayScene(player,lines);
         Console.ReadKey(true);
@@ -430,7 +433,7 @@ public static class Scenes
         "ASKELADD:  CANUTE! BE A KING!",
         "ASKELADD:  BE A BETTER ONE THAN HE WAS!",
 
-        "[Twenty blades. It takes far less time than you spent imagining it.]",
+        "[Twenty blades. All pointing at the throat of Askeladd.]",
         };
         PlayScene(player,lines);
         Console.ReadKey(true);
@@ -442,6 +445,7 @@ public static class Scenes
         Console.Clear();
         string [] lines =
         {
+            "[You see Askeladd laying down...]",
             "PLAYER:    No. No — get up. GET UP.",
             "PLAYER:    That was mine. That death was MINE.",
             "ASKELADD:  ...heh. Sorry, kid.",
@@ -463,37 +467,46 @@ public static class Scenes
 
     public static void Story_after(Player player)
     {
+        NoEnemies.Play();
         Console.Clear();
+        World.BlockInput();
         string [] lines =
         {
-        "[The water here is warm. There are no walls and nobody is counting the dead.]",
-        "[You keep reaching for a knife that you left behind on purpose,",
-        "and each time it takes a little longer to notice.]",
+            "Audio: No Enemies ~ Thors",
+            "\n        WHAT DID THORS MEAN?     \n",
+            "[The water here is warm. There are no walls and nobody is counting the dead.]",
+            "[You keep reaching for a knife that you left behind on purpose.]",
+            "[and each time it takes a little longer to notice.]\n",
 
-        "You think about what your father tried to tell you on the shore.",
-        "That the man standing in front of you is never really the enemy.",
-        "That there was never anyone it would have been alright to cut down.",
+            "[You think about what your father tried to tell you on the shore.]",
+            "[That the man standing in front of you is never really the enemy.]",
+            "[That there was never anyone it would have been alright to cut down.]\n",
 
-        "You spent eleven years trying to prove him wrong.",
-        "You never managed it. Not once. Not even with Askeladd.",
+            "[You spent eleven years trying to prove him wrong.]",
+            "[You never managed it. Not once. Not even with Askeladd.]\n",
 
-        "A real warrior has no need of a sword.",
-        "You used to think that was a riddle.",
-        "You are only now working out that it was an instruction.",
+            "[A real warrior has no need of a sword.]",
+            "[You used to think that was a riddle.]",
+            "[You are only now working out that it was an instruction.]\n",
 
-        "Dying was never the thing worth being afraid of.",
-        "Reaching the end still holding the blade — that was the thing."
+            "[Dying was never the thing worth being afraid of.]",
+            "[Reaching the end still holding the blade — that was the thing.]"
         };
-        PlayScene(player,lines);
-        Console.ReadKey(true);
+        foreach (string line in lines)
+        {
+            string leftLine = PreparePrintLine(player, line);
+            TypeLine(leftLine, 100);
+        }
+        NoEnemies.Stop();
     }
 
     public static void Story_the_end_lapies(Player player)
     {
+        EndingAudio.Play();
         Console.Clear();
         string [] lines =
         {
-            "[LAPIS]",
+            "               [LAPIS]  ",
 
             "No banners. No ships on the horizon. No one keeping score.",
 
@@ -503,7 +516,12 @@ public static class Scenes
             "This time you follow him for the right reason.",
             "             ~  THE END  ~"
         };
-        PlayScene(player,lines);
+        foreach (string line in lines)
+        {
+            TypeLine(line, 100);
+        }
         Console.ReadKey(true);
+        EndingAudio.Stop();
+        Menu.Start();
     }
 }

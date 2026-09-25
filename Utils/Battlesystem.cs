@@ -3,6 +3,7 @@ public static class Battlesystem
     private static readonly Random RandomGenerator = new();
     private const int CriticalHitChance = 20;
     private const int canRunInt = 20;
+    private const int BlockChance = 30;
 
     public static void StartBattle(Player player, Monster monster)
     {
@@ -75,7 +76,7 @@ public static class Battlesystem
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("You won and earned 100 XP!");
                 Console.ResetColor();
-                Thread.Sleep(1000);
+                Thread.Sleep(600);
                 return;
             }
 
@@ -97,7 +98,7 @@ public static class Battlesystem
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine($"----- {player.Name} VS {npc.Name} -----");
+        Console.WriteLine($"----- {player.Name} ({player.Age} yrs) VS {npc.Name} -----");
         Console.ResetColor();
         ConsoleKey key;
 
@@ -116,7 +117,7 @@ public static class Battlesystem
             int damageNPC = 0;
             int damagePlayer = player.weapon.DealDamage(player.weapon.Damage);
             bool criticalHit = RandomGenerator.Next(100) < CriticalHitChance;
-            bool blocked = RandomGenerator.Next(15, 20) == CriticalHitChance; // 1 op 10 vgm
+            bool blocked = RandomGenerator.Next(100) < BlockChance; // 1 op 10 vgm
 
             if (key == ConsoleKey.A)
             {
@@ -147,7 +148,26 @@ public static class Battlesystem
                 {
                     Console.WriteLine("Press [D] to block the opponents attack\n");
                     ConsoleKey blockKey = Console.ReadKey(true).Key;
-                    damageNPC += npc.DealDamage(15, 20);
+                    damageNPC += npc.DealDamage(20, 25);
+                    if (blockKey == ConsoleKey.D && blocked)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("\nYou blocked the attack!\n");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"{npc.Name} attacked and dealt {damageNPC} damage!\n");
+                        Console.ResetColor();
+                        player.TakeDamage(damageNPC);
+                    }
+                }
+                else if (npc.Name == "Soldier Ulf" || npc.Name == "Soldier Toke" || npc.Name == "Soldier Grimr")
+                {
+                    Console.WriteLine("Press [D] to block the opponents attack\n");
+                    ConsoleKey blockKey = Console.ReadKey(true).Key;
+                    damageNPC += npc.DealDamage(5, 15);
                     if (blockKey == ConsoleKey.D && blocked)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -178,7 +198,7 @@ public static class Battlesystem
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(won);
         Console.ResetColor();
-        Thread.Sleep(3000);
+        Thread.Sleep(2500);
         return;
     }
 }

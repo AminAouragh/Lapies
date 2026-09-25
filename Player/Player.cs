@@ -3,6 +3,7 @@ public class Player
     public string Name;
     public int HP;
     public int XP;
+    public int Age;
     public const int maxXP = 3000;
     public Location currentLocation;
     public Weapon? weapon;
@@ -17,6 +18,7 @@ public class Player
         Name = name;
         HP = 100;
         XP = 0;
+        Age = 6;
         inventory = new Inventory(this);
         weapon = null;
         QuestsDone = 0;
@@ -66,6 +68,7 @@ public class Player
     public void SeeStats()
     {
         Console.WriteLine($"Username: {Name}");
+        Console.WriteLine($"Age: {Age}");
         Console.WriteLine($"HP: {HP}/100 ");
         Console.WriteLine($"XP: {XP}/{maxXP}");
         Console.WriteLine($"Quests done: {QuestsDone}/3");

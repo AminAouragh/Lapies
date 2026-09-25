@@ -5,6 +5,7 @@ public class Quest
     public string Description;
     Player player;
     public bool IsDone = false;
+    public static List<Monster> monstersEscaped = [];
 
     public Quest(string name, string description, int points, Player player1)
     {
@@ -16,9 +17,41 @@ public class Quest
 
     public static void DisplayQuests(Player player)
     {
+        List<string> questsOptions =
+        [
+            "Active Quests",
+            "Quests Done"
+        ];
+        int index = Helpers.Navigation(questsOptions);
+        switch (index)
+        {
+            case 0:
+                Console.Clear();
+                DisplayActiveQuests(player);
+                break;
+            case 1:
+                Console.Clear();
+                DisplayQuestsDone(player);
+                break;
+        }
+    }
+
+    public static void DisplayActiveQuests(Player player)
+    {
         foreach (Quest quest in player.Quests)
         {
             if (!quest.IsDone)
+            {
+                Console.WriteLine($"- {quest.Name}: {quest.Description}");
+            }
+        }
+    }
+
+    public static void DisplayQuestsDone(Player player)
+    {
+        foreach (Quest quest in player.Quests)
+        {
+            if (quest.IsDone)
             {
                 Console.WriteLine($"- {quest.Name}: {quest.Description}");
             }
@@ -30,7 +63,7 @@ public class Quest
         Console.WriteLine($"\nLEIF: AAGGHHH WOLVES {player.Name.ToUpper()}! WOLVESS..");
         Thread.Sleep(1800);
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine("Leif is trapped by the wolves you need to protect him\nin order to continue *QUEST*");
+        Console.WriteLine("\n* Leif is trapped by the wolves you need to protect him in order to continue [QUEST] *");
         Console.ReadKey(true);
         Console.ResetColor();
         List<Monster> wolves = World.Spawn_Wolves();
@@ -39,8 +72,12 @@ public class Quest
             Battlesystem.StartBattle(player, wolf);
             if (player.IsDead())
             {
-                player.HP = 34;
+                player.HP = 36;
                 return;
+            }
+            else if (wolf.HP > 0)
+            {
+                monstersEscaped.Add(wolf);
             }
         }
         IsDone = true;
@@ -59,5 +96,35 @@ public class Quest
         IsDone = true;
         player.EnemiesDefeated++;
         player.QuestsDone++;
+    }
+
+    public bool ProtectCanute(Player player)
+    {
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("\n3 SOLDIERS ARE TRYING TO ATTACK THE PRINCE");
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine("* PROTECT CANUTE!!! [QUEST]*\n");
+        Console.ReadKey(true);
+        Console.ResetColor();
+        player.HP = 100;
+        List<NPC> soldiers =
+        [
+            new NPC("Soldier Ulf", true, 100),
+            new NPC("Soldier Toke", true, 100),
+            new NPC("Soldier Grimr", true, 100),
+        ];
+        foreach (NPC soldier in soldiers)
+        {
+            Battlesystem.StartBattleNPC(player, soldier);
+            if (player.IsDead())
+            {
+                return false;
+            }
+            player.EnemiesDefeated++;
+        }
+        IsDone = true;
+        player.QuestsDone++;
+        return true;
     }
 }
