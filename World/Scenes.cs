@@ -22,6 +22,11 @@ public static class Scenes
 
     public static string PreparePrintLine(Player player, string line)
     {
+        if (line == "REACHED LAPIS\n")
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            return line;
+        }
         if (line.StartsWith("["))
         {
             Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -472,6 +477,7 @@ public static class Scenes
         World.BlockInput();
         string [] lines =
         {
+            "REACHED LAPIS\n",
             "Audio: No Enemies ~ Thors",
             "\n        WHAT DID THORS MEAN?     \n",
             "[The water here is warm. There are no walls and nobody is counting the dead.]",
@@ -495,7 +501,14 @@ public static class Scenes
         foreach (string line in lines)
         {
             string leftLine = PreparePrintLine(player, line);
-            TypeLine(leftLine, 100);
+            if (line == "Audio: No Enemies ~ Thors")
+            {
+                TypeLine(leftLine, 50);
+            }
+            else
+            {
+                TypeLine(leftLine, 100);
+            }
         }
         NoEnemies.Stop();
     }
@@ -506,14 +519,11 @@ public static class Scenes
         Console.Clear();
         string [] lines =
         {
-            "               [LAPIS]  ",
-
-            "No banners. No ships on the horizon. No one keeping score.",
-
-            "Somewhere a long way behind you, a man is still walking down to the water",
-            "on a flat calm morning, asking his son to come with him.",
-
-            "This time you follow him for the right reason.",
+            "               [LAPIS]  \n",
+            "            Faizaan Awan  ",
+            "           Mustafa Kuruologlu ",
+            "             Hamza Taha     ",
+            "            Amin Aouragh\n",
             "             ~  THE END  ~"
         };
         foreach (string line in lines)

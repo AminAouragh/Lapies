@@ -76,7 +76,7 @@ public static class Battlesystem
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("You won and earned 100 XP!");
                 Console.ResetColor();
-                Thread.Sleep(600);
+                Console.ReadKey(true);
                 return;
             }
 
@@ -198,7 +198,7 @@ public static class Battlesystem
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(won);
         Console.ResetColor();
-        Thread.Sleep(2500);
+        Thread.Sleep(2000);
         return;
     }
 }
