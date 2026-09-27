@@ -9,6 +9,12 @@ public static class Scenes
     public static SoundPlayer arrowsAndmusic = new SoundPlayer("Utils/Audio/ArrowsAndMusic.wav");
     public static SoundPlayer EndingAudio = new SoundPlayer("Utils/Audio/Lapis.wav");
     public static SoundPlayer NoEnemies = new SoundPlayer("Utils/Audio/NoEnemies.wav");
+    public static SoundPlayer Familie = new SoundPlayer("Utils/Audio/Familie.wav");
+    public static SoundPlayer Forest = new SoundPlayer("Utils/Audio/Forest.wav");
+    public static SoundPlayer Town = new SoundPlayer("Utils/Audio/Town.wav");
+    public static SoundPlayer TheKing = new SoundPlayer("Utils/Audio/TheKing.wav");
+    public static SoundPlayer Player = new SoundPlayer("Utils/Audio/Player.wav");
+
 
     static readonly Dictionary<string, ConsoleColor> speakerColors = new()
     {
@@ -133,9 +139,45 @@ public static class Scenes
 
     public static void PlayOceanBattleContext()
     {
+
         Console.Clear();
         Console.WriteLine("A little context before entering the Ocean area, open your ears and listen\n");
         SkipAudio(oceanBattle);
+    }
+
+    public static void PlayPlayerAudio()
+    {
+        Console.Clear();
+        Console.WriteLine("Context before the first confrontation, open your ears and listen\n");
+        SkipAudio(Player);
+    }
+
+    public static void PlayForestAudio()
+    {
+        Console.Clear();
+        Console.WriteLine("Context before the forest area, open your ears and listen\n");
+        SkipAudio(Forest);
+    }
+
+    public static void PlayTownAudio()
+    {
+        Console.Clear();
+        Console.WriteLine("Context before the town area, open your ears and listen\n");
+        SkipAudio(Town);
+    }
+
+    public static void PlayTheKingAudio()
+    {
+        Console.Clear();
+        Console.WriteLine("Context after meeting Canute, open your ears and listen\n");
+        SkipAudio(TheKing);
+    }
+
+    public static void PlayFamilieAudio()
+    {
+        Console.Clear();
+        Console.WriteLine("Context after finally arriving home, open your ears and listen\n");
+        SkipAudio(Familie);
     }
     public static void Intro(Player player)
     {
@@ -246,6 +288,7 @@ public static class Scenes
 
     public static void PlayerNPCBattle(Player player)
     {
+
         Console.Clear();
         string[] lines =
         {
