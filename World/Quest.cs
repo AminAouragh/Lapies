@@ -111,20 +111,21 @@ public class Quest
         [
             new NPC("Soldier Ulf", true, 100),
             new NPC("Soldier Toke", true, 100),
-            new NPC("Soldier Grimr", true, 100),
+            new NPC("Soldier Grimr", true, 200),
         ];
         foreach (NPC soldier in soldiers)
         {
             Battlesystem.StartBattleNPC(player, soldier);
             if (player.IsDead())
             {
-                foreach (Item item in player.inventory.items)
+                foreach (Item item in player.inventory.items.ToList())
                 {
                     if (item.Name.Contains($"{player.Name}'s Dual Daggers"))
                     {
                         player.inventory.RemoveItem(item);
                     }
                 }
+                player.weapon = new Weapon(player.inventory.items[0]);
                 string lost = $"Since u could not protect Canute, you'll continue to live a miserable life\nGoodluck {player.Name}...";
                 player.HP = 12;
                 foreach (char c in lost)

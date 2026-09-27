@@ -397,9 +397,9 @@ public class World
     {
         List<Monster> wolves = new()
         {
-            new Monster("Alpha Wolf", 27, 6, null),
+            new Monster("Alpha Wolf", 23, 4, null),
             new Monster("Sigma Wolf", 15, 3, null),
-            new Monster("Wolf 1", 10, 3, null),
+            new Monster("Wolf 1", 12, 3, null),
             new Monster("Wolf 2", 10, 2, null),
             new Monster("Wolf 3", 10, 2, null),
             new Monster("Lone Wolf", 5, 1, null)

@@ -414,7 +414,7 @@ public static class Scenes
         PlayScene(player,lines);
         Console.ReadKey(true);
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine("*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
+        Console.WriteLine("\n*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
         Thread.Sleep(800);
         Console.ResetColor();
         Console.ForegroundColor = ConsoleColor.White;
