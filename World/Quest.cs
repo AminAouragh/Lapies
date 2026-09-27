@@ -111,7 +111,7 @@ public class Quest
         [
             new NPC("Soldier Ulf", true, 100),
             new NPC("Soldier Toke", true, 100),
-            new NPC("Soldier Grimr", true, 200),
+            new NPC("Soldier Grimr", true, 80),
         ];
         foreach (NPC soldier in soldiers)
         {
@@ -126,6 +126,7 @@ public class Quest
                     }
                 }
                 player.weapon = new Weapon(player.inventory.items[0]);
+                player.inventory.equippedWeapon = player.weapon;
                 string lost = $"Since u could not protect Canute, you'll continue to live a miserable life\nGoodluck {player.Name}...";
                 player.HP = 12;
                 foreach (char c in lost)

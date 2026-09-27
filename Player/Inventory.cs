@@ -3,7 +3,7 @@ public class Inventory
     public Player Player;
     public List<Item> items = new List<Item>();
     private Item? equippedItem = null;
-    private Weapon? equippedWeapon = null;
+    public Weapon? equippedWeapon = null;
 
     public Inventory(Player player)
     {
