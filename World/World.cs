@@ -157,6 +157,7 @@ public class World
             }
             else if (current == Grassland && beenHere == false && second == false)
             {
+                Scenes.PlayPlayerAudio();
                 Scenes.PlayerNPCBattle(player);
                 player.Age = 8;
                 Battlesystem.StartBattleNPC(player, Grassland.NPC);
@@ -175,6 +176,7 @@ public class World
             }
             else if (current == Forest && !current.BeenHere && second == false)
             {
+                Scenes.PlayForestAudio();
                 player.Age = 12;
                 Scenes.LeifIntro(player);
                 sceneTriggered = true;
@@ -182,6 +184,7 @@ public class World
             }
             else if(current == Town && !current.BeenHere && second == false)
             {
+
                 current.Quest.Protect_Leif(player);
                 if (!player.Quests.Contains(current.Quest))
                 {
@@ -193,12 +196,15 @@ public class World
                 }
                 else
                 {
+                    Scenes.PlayTownAudio();
                     Scenes.After_quest1_story1(player);
                     current.BeenHere = true;
                 }
+
             }
             else if(current == Home && current.BeenHere && !current.SecondTime && second == false)
             {
+                Scenes.PlayFamilieAudio();
                 player.Age = 14;
                 Scenes.Story_your_mother_and_sister(player);
                 player.HP = 100;
@@ -228,8 +234,10 @@ public class World
             }
             else if (current == Canute && !current.BeenHere)
             {
+
                 player.Age = 16;
                 Scenes.Story_the_throne(player);
+                Scenes.PlayTheKingAudio();
                 Scenes.Story_after_quest3(player);
                 player.Quests.Add(current.Quest);
                 bool succeededEnding = current.Quest.ProtectCanute(player);
