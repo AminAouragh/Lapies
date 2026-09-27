@@ -5,6 +5,8 @@ public class World
     public static bool thorkellQuest = false;
     public static bool askeladdQuest = false;
     public static bool Endgame = false;
+    public static bool spawnMonsters = false;
+    public static bool canDieOneMoreTime = false;
     public static readonly List<Weapon> Weapons = new List<Weapon>();
     public static readonly List<Monster> Monsters = new List<Monster>();
     public static readonly List<Quest> Quests = new List<Quest>();
@@ -33,27 +35,18 @@ public class World
     public static Location Vinland = new("Vinland");
 
     //rewards
-    public static Item reward_rat = new("Poisen ring", "Gives you inmunite to poisen", 0,false,0);
-    public static Item reward_snake = new("Knife", "Knife to skin snakes", 5, false,0);
-    public static Item reward_monster = new("Spider eyes", "A rare prize from a deadly creature of the forest",0,false,0);
+    public static Item stale_rations = new Item("Stale Rations", "Hard bread and dried meat scavenged from a dead man's pack. Not much, but it's something.", 0, 15, false, true, 2);
+    public static Item herbal_poultice = new Item("Herbal Poultice", "Crushed herbs bound in cloth, the kind camp healers use to close a wound before infection sets in.", 0, 30, false, true, 8);
+    public static Item battlefield_bandages = new Item("Battlefield Bandages", "Clean linen soaked in something bitter. Whoever packed these expected to survive using them.", 0, 45, false, true, 15);
+
+    public static Item copper_ring = new Item("Copper Ring", "A cheap ring pried off a dead man's finger. Not worth much, but coin is coin.", 0,0, false, false, 5);
+    public static Item stolen_coin_purse = new Item("Stolen Coin Purse", "A leather purse, already looted once before you got to it.", 0, 0, false, false, 20);
+    public static Item wolf_pelt = new Item("Wolf Pelt", "Thick, matted fur — the kind traders in any town will pay for without asking where it came from.", 0, 0, false, false, 12);
     public static string instruction = "";
-
-    // public const int LOCATION_ID_HOME = 1;
-    // public const int LOCATION_ID_TOWN_SQUARE = 2;
-    // public const int LOCATION_ID_GUARD_POST = 3;
-    // public const int LOCATION_ID_ALCHEMIST_HUT = 4;
-    // public const int LOCATION_ID_ALCHEMISTS_GARDEN = 5;
-    // public const int LOCATION_ID_FARMHOUSE = 6;
-    // public const int LOCATION_ID_FARM_FIELD = 7;
-    // public const int LOCATION_ID_BRIDGE = 8;
-    // public const int LOCATION_ID_SPIDER_FIELD = 9;
-
-
 
     public World(Player player)
     {
         Player = player;
-
     }
 
     public static void Start(Player player)
@@ -119,6 +112,14 @@ public class World
                 Console.WriteLine("Leif did not go that way, open up your map if you're lost");
                 Thread.Sleep(500);
                 continue;
+            }
+            if (spawnMonsters)
+            {
+                SpawnMonster(player);
+            }
+            if (player.IsDead() && canDieOneMoreTime)
+            {
+                Scenes.GameOver(player);
             }
             currentLocation = Movement(currentLocation, key);
             currentLocation = SceneInAction(player, currentLocation, currentLocation.BeenHere, currentLocation.SecondTime);
@@ -228,23 +229,26 @@ public class World
                 {
                     Scenes.Story_after_quest2(player);
                     current.BeenHere = true;
+                    spawnMonsters = true;
+                    player.HP = 84;
                     sceneTriggered = true;
                     thorkellQuest = true;
                 }
             }
             else if (current == Canute && !current.BeenHere)
             {
-
                 player.Age = 16;
                 Scenes.Story_the_throne(player);
                 Scenes.PlayTheKingAudio();
                 Scenes.Story_after_quest3(player);
                 player.Quests.Add(current.Quest);
                 bool succeededEnding = current.Quest.ProtectCanute(player);
-                if (succeededEnding)
+                if (!succeededEnding)
                 {
-                    Endgame = true;
+                    Endgame = false;
+                    canDieOneMoreTime = true;
                 }
+                Endgame = true;
                 Scenes.Story_the_last_conversation(player);
                 askeladdQuest = true;
                 current.BeenHere = true;
@@ -256,6 +260,7 @@ public class World
                 current.BeenHere = true;
                 player.currentLocation = Vinland;
                 sceneTriggered = true;
+                spawnMonsters = false;
                 Scenes.Story_after(player);
                 Thread.Sleep(5000);
                 Scenes.Story_the_end_lapies(player);
@@ -357,20 +362,35 @@ public class World
 
     public static void SpawnMonster(Player player)
     {
-        if (RandomGenerator.Next(100) >= 35)
+        if (RandomGenerator.Next(100) >= 33)
         {
             return;
         }
 
-        Monster monster = RandomGenerator.Next(3) switch
+        Monster monster = RandomGenerator.Next(6) switch
         {
-            0 => new Monster("rat", 30, 5,reward_rat),
-            1 => new Monster("snake", 45, 8,reward_snake),
-            _ => new Monster("giant spider", 60, 10,reward_monster)
+            0 => new Monster("Camp Scavenger", 27, 2, stale_rations),
+            1 => new Monster("Adder", 31, 3, herbal_poultice),
+            2 => new Monster("Deserter", 60, 4, battlefield_bandages),
+            3 => new Monster("Camp Thief", 45, 4, copper_ring),
+            4 => new Monster("Grave Robber", 15, 6, stolen_coin_purse),
+            5 => new Monster("Lame Wolf", 20, 7, wolf_pelt),
+            _ => null
         };
-
-        Battlesystem.StartBattle(player, monster);
-        Monster.Add_reward(player);
+        if (monster != null)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"\nOh no! {monster.Name} spawned here!!");
+            Console.ResetColor();
+            Thread.Sleep(800);
+            Battlesystem.StartBattle(player, monster);
+            if (player.HP > 0)
+            {
+                Monster.Add_reward(player, monster);
+            }
+            return;
+        }
+        return;
     }
 
     public static List<Monster> Spawn_Wolves()
@@ -386,14 +406,6 @@ public class World
         };
         return wolves;
     }
-
-    // public static void PopulateWeapons(Player player)
-    // {
-    //     if (!player.inventory.PlayerHasItemInInventory("Sword"))
-    //     {
-    //         player.inventory.AddItem(new Item("Sword", "Rusty sword", 5, true, 50));
-    //     }
-    // }
 
     public static void PopulateNPC(Player player)
     {
@@ -447,124 +459,4 @@ public class World
         Ocean.North = Vinland;
         Vinland.South = Ocean;
     }
-
 }
-//     public static void PopulateLocations()
-//     {
-//         // Create each location
-//         Location Home = new Location(LOCATION_ID_Home, "Home", "Your house. You really need to clean up the place.", null, null);
-
-//         Location TownSquare = new Location(LOCATION_ID_Town_SQUARE, "Town square", "You see a fountain.", null, null);
-
-//         Location alchemistHut = new Location(LOCATION_ID_ALCHEMIST_HUT, "Alchemist's hut", "There are many strange plants on the shelves.", null, null);
-//         alchemistHut.QuestAvailableHere = QuestByID(QUEST_ID_CLEAR_ALCHEMIST_GARDEN);
-
-//         Location alchemistsGarden = new Location(LOCATION_ID_ALCHEMISTS_GARDEN, "Alchemist's garden", "Many plants are growing here.", null, null);
-//         alchemistsGarden.MonsterLivingHere = MonsterByID(MONSTER_ID_RAT);
-
-//         Location farmhouse = new Location(LOCATION_ID_FARMHOUSE, "Farmhouse", "There is a small farmhouse, with a farmer in front.", null, null);
-//         farmhouse.QuestAvailableHere = QuestByID(QUEST_ID_CLEAR_FARMERS_FIELD);
-
-//         Location farmersField = new Location(LOCATION_ID_FARM_FIELD, "Farmer's field", "You see rows of vegetables growing here.", null, null);
-//         farmersField.MonsterLivingHere = MonsterByID(MONSTER_ID_SNAKE);
-
-//         Location guardPost = new Location(LOCATION_ID_GUARD_POST, "Guard post", "There is a large, tough-looking guard here.", null, null);
-
-//         Location bridge = new Location(LOCATION_ID_BRIDGE, "Bridge", "A stone bridge crosses a wide river.", null, null);
-//         bridge.QuestAvailableHere = QuestByID(QUEST_ID_COLLECT_SPIDER_SILK);
-
-//         Location spiderField = new Location(LOCATION_ID_SPIDER_FIELD, "Forest", "You see spider webs covering covering the trees in this forest.", null, null);
-//         spiderField.MonsterLivingHere = MonsterByID(MONSTER_ID_GIANT_SPIDER);
-
-//         // Link the locations together
-//         Home.LocationToNorth = TownSquare;
-
-//         TownSquare.LocationToNorth = alchemistHut;
-//         TownSquare.LocationToSouth = Home;
-//         TownSquare.LocationToEast = guardPost;
-//         TownSquare.LocationToWest = farmhouse;
-
-//         farmhouse.LocationToEast = TownSquare;
-//         farmhouse.LocationToWest = farmersField;
-
-//         farmersField.LocationToEast = farmhouse;
-
-//         alchemistHut.LocationToSouth = TownSquare;
-//         alchemistHut.LocationToNorth = alchemistsGarden;
-
-//         alchemistsGarden.LocationToSouth = alchemistHut;
-
-//         guardPost.LocationToEast = bridge;
-//         guardPost.LocationToWest = TownSquare;
-
-//         bridge.LocationToWest = guardPost;
-//         bridge.LocationToEast = spiderField;
-
-//         spiderField.LocationToWest = bridge;
-
-//         // Add the locations to the static list
-//         Locations.Add(Home);
-//         Locations.Add(TownSquare);
-//         Locations.Add(guardPost);
-//         Locations.Add(alchemistHut);
-//         Locations.Add(alchemistsGarden);
-//         Locations.Add(farmhouse);
-//         Locations.Add(farmersField);
-//         Locations.Add(bridge);
-//         Locations.Add(spiderField);
-//     }
-
-//     public static Location LocationByID(int id)
-//     {
-//         foreach (Location location in Locations)
-//         {
-//             if (location.ID == id)
-//             {
-//                 return location;
-//             }
-//         }
-
-//         return null;
-//     }
-
-//     public static Weapon WeaponByID(int id)
-//     {
-//         foreach (Weapon item in Weapons)
-//         {
-//             if (item.ID == id)
-//             {
-//                 return item;
-//             }
-//         }
-
-//         return null;
-//     }
-
-
-
-//     public static Monster MonsterByID(int id)
-//     {
-//         foreach (Monster monster in Monsters)
-//         {
-//             if (monster.ID == id)
-//             {
-//                 return monster;
-//             }
-//         }
-
-//         return null;
-//     }
-
-//     public static Quest QuestByID(int id)
-//     {
-//         foreach (Quest quest in Quests)
-//         {
-//             if (quest.ID == id)
-//             {
-//                 return quest;
-//             }
-//         }
-
-//         return null;
-//     }
-// }
