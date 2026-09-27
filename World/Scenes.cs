@@ -208,6 +208,18 @@ public static class Scenes
         Console.ReadKey(true);
     }
 
+    public static void GameOver(Player player)
+    {
+        Console.Clear();
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.WriteLine("YOU DIED, GAME OVER!");
+        Console.ResetColor();
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine("\nPress any key to quit the game...");
+        Console.ReadKey(true);
+        Environment.Exit(0);
+    }
+
     public static void OceanBattle(Player player)
     {
         Console.Clear();
@@ -317,11 +329,8 @@ public static class Scenes
         };
         PlayScene(player, lines);
         Console.ReadKey(true);
-        Item rustySword = new Item("Sword", "Rusty sword", 5, true, 50);
+        Item rustySword = new Item("Sword", "Rusty sword", 5, 0, true, false, 50);
         player.inventory.AddItem(player, rustySword);
-        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {rustySword.Name}");
-        Console.ResetColor();
         Thread.Sleep(1500);
     }
 
@@ -377,11 +386,8 @@ public static class Scenes
         };
         PlayScene(player,lines);
         Console.ReadKey(true);
-        Item thorfinnsBlades = new($"{player.Name}'s Dual Daggers", "Dad's Legacy: short, fast and lethal", 25, true, 0);
+        Item thorfinnsBlades = new($"{player.Name}'s Dual Daggers", "Dad's Legacy: short, fast and lethal", 25, 0, true, false, 0);
         player.inventory.AddItem(player, thorfinnsBlades);
-        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {thorfinnsBlades.Name}");
-        Console.ResetColor();
         Thread.Sleep(1600);
     }
 
@@ -408,8 +414,8 @@ public static class Scenes
         PlayScene(player,lines);
         Console.ReadKey(true);
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        Console.WriteLine("*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
-        Thread.Sleep(1800);
+        Console.WriteLine("\n*QUEST INCOMING* IN THE FAR DISTANCE YOU SEE A BIG LAUGHING MAN\nSTANDING IN YOU'RE WAY, TRY TO DEFEAT HIM");
+        Thread.Sleep(800);
         Console.ResetColor();
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("Player tip: Equip your strongest weapon");

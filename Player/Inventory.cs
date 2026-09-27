@@ -1,9 +1,9 @@
 public class Inventory
 {
     public Player Player;
-    private List<Item> items = new List<Item>();
+    public List<Item> items = new List<Item>();
     private Item? equippedItem = null;
-    private Weapon? equippedWeapon = null;
+    public Weapon? equippedWeapon = null;
 
     public Inventory(Player player)
     {
@@ -12,12 +12,15 @@ public class Inventory
 
     public void AddItem(Player player, Item newItem)
     {
-        items.Add(newItem);
         if (equippedWeapon == null && newItem.IsWeapon)
         {
             equippedWeapon = new Weapon(newItem);
             player.weapon = equippedWeapon;
         }
+        items.Add(newItem);
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine($"\n{player.Name.ToUpper()} HAS RECEIVED: {newItem.Name}");
+        Console.ResetColor();
     }
 
     public bool PlayerHasItemInInventory(string item)
@@ -81,26 +84,75 @@ public class Inventory
             Console.Write("> ");
 
             string input = Console.ReadLine()?.ToUpper();
-
             if (input == "X")
             {
                 browsing = false;
+                return;
             }
-            else if (input == "V" || input == "E")
-            {
-                Console.Write("Enter Item Number: ");
-                if (int.TryParse(Console.ReadLine(), out int choice))
-                {
-                    if (input == "V") ViewItemDetails(choice);
-                    if (input == "E") SelectWeapon(choice);
-                }
-                else
-                {
-                    Console.WriteLine("Invalid number.");
-                }
 
+            try
+            {
+                if (input == "V" || input == "E")
+                {
+                    Console.Write("Enter Item Number: ");
+                    if (int.TryParse(Console.ReadLine(), out int choice))
+                    {
+                        if (input == "V") ViewItemDetails(choice);
+                        if (input == "E" && items[choice - 1].IsWeapon) SelectWeapon(choice);
+                        if (input == "E" && items[choice - 1].IsHealing) SelectHealing(choice);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid number.");
+                    }
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("Nothing here, it's empty");
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Nothing here, it's empty");
+            }
+            finally
+            {
                 Console.WriteLine("\nPress any key to return...");
                 Console.ReadKey();
+            }
+
+        }
+    }
+
+    public void SelectHealing(int index)
+    {
+        int actualIndex = index - 1;
+        string choice = "";
+        if (actualIndex >= 0 && actualIndex < items.Count)
+        {
+            if (items[actualIndex].IsHealing)
+            {
+                do
+                {
+                    Console.WriteLine($"\n{Player.Name}: {Player.HP}hp");
+                    Console.WriteLine("Would you like to heal? (Y/N)");
+                    choice = Console.ReadLine();
+                }
+                while (choice.ToLower() != "y" && choice.ToLower() != "n");
+                if (choice.ToLower() == "y")
+                {
+                    Player.HP = Math.Min(Player.HP + items[actualIndex].Heal, 100);
+                    RemoveItem(items[actualIndex]);
+                    Console.WriteLine($"\nYou're now at {Player.HP}hp");
+                }
+                else if (choice.ToLower() == "n")
+                {
+                    return;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"\n{items[actualIndex].Name} cannot be selected as healing item.");
             }
         }
     }
@@ -132,7 +184,8 @@ public class Inventory
             Console.WriteLine($"\n--- {item.Name} ---");
             Console.WriteLine($"Description: {item.Description}");
             Console.WriteLine($"Damage: {item.Damage}");
-            Console.WriteLine($"Type: {(item.IsWeapon ? "Weapon" : "Utility")}");
+            Console.WriteLine($"Healing: {item.Heal}");
+            Console.WriteLine($"Type: {(item.IsWeapon ? "Weapon" : item.IsHealing ? "Healing Item" : "")}");
         }
         else
         {

@@ -107,18 +107,36 @@ public class Quest
         Console.WriteLine("* PROTECT CANUTE!!! [QUEST]*\n");
         Console.ReadKey(true);
         Console.ResetColor();
-        player.HP = 100;
         List<NPC> soldiers =
         [
             new NPC("Soldier Ulf", true, 100),
             new NPC("Soldier Toke", true, 100),
-            new NPC("Soldier Grimr", true, 100),
+            new NPC("Soldier Grimr", true, 80),
         ];
         foreach (NPC soldier in soldiers)
         {
             Battlesystem.StartBattleNPC(player, soldier);
             if (player.IsDead())
             {
+                foreach (Item item in player.inventory.items.ToList())
+                {
+                    if (item.Name.Contains($"{player.Name}'s Dual Daggers"))
+                    {
+                        player.inventory.RemoveItem(item);
+                    }
+                }
+                player.weapon = new Weapon(player.inventory.items[0]);
+                player.inventory.equippedWeapon = player.weapon;
+                string lost = $"Since u could not protect Canute, you'll continue to live a miserable life\nGoodluck {player.Name}...";
+                player.HP = 12;
+                foreach (char c in lost)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(c);
+                    Thread.Sleep(80);
+                }
+                Console.ResetColor();
+                Thread.Sleep(2000);
                 return false;
             }
             player.EnemiesDefeated++;
