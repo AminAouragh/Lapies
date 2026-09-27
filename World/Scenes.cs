@@ -22,6 +22,16 @@ public static class Scenes
 
     public static string PreparePrintLine(Player player, string line)
     {
+        if (line.Contains("[LAPIS]"))
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            return line;
+        }
+        if (line.Contains("THE END"))
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            return line;
+        }
         if (line == "REACHED LAPIS\n")
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -519,16 +529,17 @@ public static class Scenes
         Console.Clear();
         string [] lines =
         {
-            "               [LAPIS]  \n",
-            "            Faizaan Awan  ",
-            "           Mustafa Kuruologlu ",
+            "                [LAPIS]  \n",
+            "             Faizaan Awan  ",
+            "          Mustafa Kuruologlu  ",
             "             Hamza Taha     ",
             "            Amin Aouragh\n",
             "             ~  THE END  ~"
         };
         foreach (string line in lines)
         {
-            TypeLine(line, 100);
+            string leftLine = PreparePrintLine(player, line);
+            TypeLine(leftLine, 100);
         }
         Console.ReadKey(true);
         EndingAudio.Stop();
